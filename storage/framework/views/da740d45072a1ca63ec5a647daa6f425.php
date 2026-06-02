@@ -1,0 +1,2 @@
+<link rel="stylesheet" href="<?php echo e(asset('css/custom-filament.css')); ?>?v=<?php echo e(filemtime(public_path('css/custom-filament.css'))); ?>">
+<?php /**PATH C:\myProjects\aqarmousa\resources\views/filament/custom-css.blade.php ENDPATH**/ ?>

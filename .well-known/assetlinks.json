@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.propix8.app",
+      "sha256_cert_fingerprints": [
+        "FC:89:9E:9E:A8:17:87:D4:7A:A2:D4:CD:DC:80:B9:56:0F:56:8C:1C:D3:96:48:47:F3:B9:EC:C8:D2:48:21:6E",
+        "54:96:2E:21:D4:63:22:EC:41:75:3D:F5:06:EB:36:A4:9F:38:AD:04:9A:AC:4D:64:28:9B:1B:F6:03:1F:E9:3C"
+      ]
+    }
+  }
+]

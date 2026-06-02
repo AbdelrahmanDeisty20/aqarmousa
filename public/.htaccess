@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# تجاهل فولدر frontend
+RewriteCond %{REQUEST_URI} ^/frontend [NC]
+RewriteRule ^ - [L]
+
+# Laravel
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]

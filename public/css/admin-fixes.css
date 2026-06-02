@@ -1,0 +1,21 @@
+/* Fix for JFIF image preview in Filament FileUpload */
+.filepond--file {
+    position: relative;
+}
+
+.filepond--file[data-filepond-item-state="processing-complete"] .filepond--file-info::before,
+.filepond--file[data-filepond-item-state="idle"] .filepond--file-info::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+/* This will be handled by JavaScript to inject the actual image */

@@ -101,7 +101,7 @@ class DemoContentSeeder extends Seeder
 
             $unitTypes[] = UnitType::firstOrCreate(
                 ['name_en' => $type['en']],
-                ['name_ar' => $type['ar'], 'icon' => 'unit-types/' . $type['image_file']]
+                ['name_ar' => $type['ar']]
             );
         }
 
@@ -275,8 +275,19 @@ class DemoContentSeeder extends Seeder
 
                 // Use the type-specific image
                 static $sharedTypeImages = [];
-                $typeIconPath = str_replace('unit-types/', '', $type->icon);
-                $unitTypeSource = base_path('unit types/' . $typeIconPath);
+                $typeImages = [
+                    'Apartment' => 'apartment.jpg',
+                    'Villa' => 'villa.jpg',
+                    'Townhouse' => 'townhouse.jpg',
+                    'Twin House' => 'twinhouse.jpg',
+                    'Chalet' => 'chalet.jpg',
+                    'Duplex' => 'duplex.jpg',
+                    'Penthouse' => 'penthouse.jpg',
+                    'Studio' => 'studio.jpg',
+                    'Shop' => 'shop.jpg',
+                ];
+                $imageFile = $typeImages[$type->name_en] ?? 'apartment.jpg';
+                $unitTypeSource = base_path('unit types/' . $imageFile);
 
                 if (File::exists($unitTypeSource)) {
                     if (!isset($sharedTypeImages[$type->id])) {

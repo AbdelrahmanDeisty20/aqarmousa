@@ -25,11 +25,11 @@ class Setting extends Model
             $decoded = json_decode($setting->value, true);
             if (is_array($decoded)) {
                 return array_map(function ($path) {
-                    return env('APP_URL') . Storage::disk('public')->url($path);
+                    return Storage::disk('public')->url($path);
                 }, $decoded);
             }
 
-            return env('APP_URL') . Storage::disk('public')->url($setting->value);
+            return Storage::disk('public')->url($setting->value);
         }
 
         if ($setting->type === 'json' || is_array(json_decode($setting->value, true))) {

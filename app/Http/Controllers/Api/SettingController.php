@@ -31,19 +31,7 @@ class SettingController extends Controller
 
         $settings = [];
         foreach ($keys as $key) {
-            $value = Setting::getValue($key);
-
-            // Add full URL for image fields
-            if ($key === 'site_logo' && $value) {
-                $settings[$key] = env('APP_URL') . Storage::disk('public')->url($value);
-            } elseif ($key === 'home_hero_image' && $value) {
-                // home_hero_image is an array of paths
-                $settings[$key] = array_map(function($path) {
-                    return env('APP_URL') . Storage::disk('public')->url($path);
-                }, $value);
-            } else {
-                $settings[$key] = $value;
-            }
+            $settings[$key] = Setting::getValue($key);
         }
 
         return $this->success($settings);

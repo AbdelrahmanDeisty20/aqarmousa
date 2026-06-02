@@ -1,16 +1,9 @@
 RewriteEngine On
 
-# تجاهل فولدر frontend
-RewriteCond %{REQUEST_URI} ^/frontend [NC]
-RewriteRule ^ - [L]
+# Prevent directory listing
+Options -Indexes
 
-# Laravel
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.php [L]
-
-RewriteEngine On
-
+# Route requests to Laravel's index.php in the root directory
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [L]

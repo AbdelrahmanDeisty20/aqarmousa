@@ -208,13 +208,13 @@ class DemoContentSeeder extends Seeder
         $floorplanSource = base_path('land types/floorplan.png');
         $videoSource = base_path('land types/videoplayback.mp4');
 
-        foreach ($compounds as $compound) {
-            $numUnits = 7;
+        $governorates = Governorate::all();
+        foreach ($governorates as $governorate) {
+            $numUnits = 4;
 
             for ($k = 0; $k < $numUnits; $k++) {
                 $seller = $admin;
                 $type = $unitTypes[array_rand($unitTypes)];
-                $dev = $developers[array_rand($developers)];
 
                 $price = $fakerEn->numberBetween(1000000, 15000000);
                 $discount = (rand(0, 4) === 0) ? $fakerEn->numberBetween(50000, 500000) : null;
@@ -225,33 +225,20 @@ class DemoContentSeeder extends Seeder
 
                 $category = 'land';
 
-                if ($category === 'land') {
-                    $length = $fakerEn->numberBetween(20, 80);
-                    $width = $fakerEn->numberBetween(15, 60);
-                    $area = $length * $width;
-                    $rooms = null;
-                    $bathrooms = null;
-                    $garages = null;
-                    $buildYear = null;
-                    $internalArea = null;
-                    $landArea = null;
-                    $devStatus = null;
-                } else {
-                    $length = null;
-                    $width = null;
-                    $area = $fakerEn->numberBetween(80, 400);
-                    $rooms = $fakerEn->numberBetween(2, 6);
-                    $bathrooms = $fakerEn->numberBetween(1, 4);
-                    $garages = $fakerEn->numberBetween(0, 2);
-                    $buildYear = $fakerEn->numberBetween(2010, 2024);
-                    $internalArea = $area - $fakerEn->numberBetween(10, 50);
-                    $landArea = $area + $fakerEn->numberBetween(20, 100);
-                    $devStatus = ['under_construction', 'ready', 'handover_soon', 'primary', 'resale'][rand(0, 4)];
-                }
+                $length = $fakerEn->numberBetween(20, 80);
+                $width = $fakerEn->numberBetween(15, 60);
+                $area = $length * $width;
+                $rooms = null;
+                $bathrooms = null;
+                $garages = null;
+                $buildYear = null;
+                $internalArea = null;
+                $landArea = null;
+                $devStatus = null;
 
                 $unit = Unit::create([
-                    'title_en' => $type->name_en . ' for ' . $selectedOfferType . ' in ' . $compound->name_en,
-                    'title_ar' => $type->name_ar . ' للـ ' . ($isSale ? 'بيع' : 'إيجار') . ' في ' . $compound->name_ar,
+                    'title_en' => $type->name_en . ' for ' . $selectedOfferType . ' in ' . $governorate->name_en,
+                    'title_ar' => $type->name_ar . ' للـ ' . ($isSale ? 'بيع' : 'إيجار') . ' في ' . $governorate->name_ar,
                     'description_en' => $fakerEn->realText(200),
                     'description_ar' => $arabicDescriptions[array_rand($arabicDescriptions)],
                     'address_ar' => $fakerAr->address,
@@ -274,12 +261,12 @@ class DemoContentSeeder extends Seeder
                     'status' => $selectedStatus,
                     'is_visible' => true,
                     'owner_id' => $seller->id,
-                    'governorate_id' => $compound->governorate_id,
+                    'governorate_id' => $governorate->id,
                     'unit_type_id' => $type->id,
-                    'compound_id' => $compound->id,
-                    'developer_id' => $dev->id,
-                    'latitude' => ($governorateCoordinates[$compound->governorate->name_en] ?? ['lat' => 30.0444, 'lng' => 31.2357])['lat'] + (rand(-100, 100) / 10000), // Slight offset
-                    'longitude' => ($governorateCoordinates[$compound->governorate->name_en] ?? ['lat' => 30.0444, 'lng' => 31.2357])['lng'] + (rand(-100, 100) / 10000),
+                    'compound_id' => null,
+                    'developer_id' => null,
+                    'latitude' => ($governorateCoordinates[$governorate->name_en] ?? ['lat' => 30.0444, 'lng' => 31.2357])['lat'] + (rand(-100, 100) / 10000), // Slight offset
+                    'longitude' => ($governorateCoordinates[$governorate->name_en] ?? ['lat' => 30.0444, 'lng' => 31.2357])['lng'] + (rand(-100, 100) / 10000),
                     'sold_at' => ($selectedStatus === 'sold') ? now()->subDays(rand(1, 30)) : null,
                     'reserved_at' => ($selectedStatus === 'reserved') ? now()->subDays(rand(1, 10)) : null,
                 ]);

@@ -56,8 +56,6 @@ class UnitResource extends JsonResource
                 'id' => $this->whenLoaded('type', fn() => $this->type->id ?? 0),
                 'name' => $this->whenLoaded('type', fn() => (app()->getLocale() === 'ar' ? $this->type->name_ar : $this->type->name_en) ?? ''),
             ],
-            'compound' => new CompoundResource($this->whenLoaded('compound')),
-            'developer' => new DeveloperResource($this->whenLoaded('developer')),
             'amenities' => AmenityResource::collection($this->whenLoaded('amenities')),
             'average_rating' => (float) ($this->reviews_avg_rating ?? 0),
             'reviews_count' => (int) ($this->reviews_count ?? 0),

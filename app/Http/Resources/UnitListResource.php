@@ -36,8 +36,6 @@ class UnitListResource extends JsonResource
             "width" => $this->width ?? 0,
             "category" => $this->category ?? 'land',
             "governorate" => new GovernorateResource($this->governorate),
-            "compound" => $this->when($this->compound_id, new CompoundResource($this->whenLoaded("compound"))),
-            "developer" => $this->when($this->developer_id, new DeveloperResource($this->whenLoaded("developer"))),
             "unit_type" => [
                 "id" => $this->unit_type_id,
                 "name" => ($lang === "ar" ? ($this->type->name_ar ?? "") : ($this->type->name_en ?? "")),

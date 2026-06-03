@@ -1,20 +1,13 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
-
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
-
 use Illuminate\Support\Facades\Schedule;
 
-Schedule::command('queue:work --max-time=30')
+// هنخلي الـ Worker يشتغل لمدة 55 ثانية عشان يغطي الدقيقة كلها
+// ده هيخلي الإرسال أسرع بكتير لأن الـ Worker هيفضل مستني أي جوب جديد
+Schedule::command('queue:work --stop-when-empty --max-time=55')
     ->everyMinute()
     ->withoutOverlapping();
 
-// Clean up expired password reset tokens hourly
+// تنظيف التوكنات
 Schedule::command('auth:clear-resets')->hourly();
-
-// Clean up expired API tokens daily to keep the database light
 Schedule::command('sanctum:prune-expired --hours=24')->daily();

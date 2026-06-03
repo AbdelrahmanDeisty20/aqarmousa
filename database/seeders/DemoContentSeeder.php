@@ -223,7 +223,7 @@ class DemoContentSeeder extends Seeder
                 $selectedStatus = $statuses[array_rand($statuses)];
                 $isSale = ($selectedOfferType == 'sale');
 
-                $category = (rand(0, 1) === 0) ? 'land' : 'property';
+                $category = 'land';
 
                 if ($category === 'land') {
                     $length = $fakerEn->numberBetween(20, 80);

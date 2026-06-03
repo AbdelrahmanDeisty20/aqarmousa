@@ -9,7 +9,7 @@ class SellerUnitService
 {
     public function getSellerUnits($user, array $filters = [], $perPage = 10)
     {
-        $query = Unit::with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership'])
+        $query = Unit::with(['owner', 'governorate', 'type', 'media', 'amenities', 'ownership'])
             ->where('owner_id', $user->id);
 
         if (isset($filters['governorate_id'])) {

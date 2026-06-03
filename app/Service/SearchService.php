@@ -17,7 +17,7 @@ class SearchService
         $words = explode(' ', $query);
         $q = '%' . $query . '%';
 
-        $units = Unit::with(['governorate', 'compound', 'developer', 'type', 'media'])
+        $units = Unit::with(['governorate', 'type', 'media'])
             ->where(function ($sub) use ($query, $words) {
                 // Search as whole phrase
                 $sub->where('title_ar', 'like', "%{$query}%")

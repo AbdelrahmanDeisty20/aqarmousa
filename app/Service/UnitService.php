@@ -11,7 +11,7 @@ class UnitService
     public function getFilteredUnits(array $filters, $perPage = 10): LengthAwarePaginator
     {
         $query = Unit::query()
-            ->with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership'])
+            ->with(['owner', 'governorate', 'type', 'media', 'amenities', 'ownership'])
             ->withAvg('reviews', 'rating')
             ->withCount('reviews')
             ->whereIn('status', ['available', 'sold', 'reserved']) // Only show available/sold/reserved units for public
@@ -157,7 +157,7 @@ class UnitService
 
     public function getLatestUnits($limit = 6)
     {
-        return Unit::with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership'])
+        return Unit::with(['owner', 'governorate', 'type', 'media', 'amenities', 'ownership'])
             ->whereIn('status', ['available', 'sold', 'reserved'])
             ->where('is_visible', true)
             ->latest()
@@ -169,7 +169,7 @@ class UnitService
     {
         $unit = Unit::findOrFail($unitId);
 
-        return Unit::with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership'])
+        return Unit::with(['owner', 'governorate', 'type', 'media', 'amenities', 'ownership'])
             ->whereIn('status', ['available', 'sold', 'reserved'])
             ->where('is_visible', true)
             ->where('id', '!=', $unitId)
@@ -184,7 +184,7 @@ class UnitService
 
     public function getNearbyUnits($user, $perPage = 10)
     {
-        $query = Unit::with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership'])
+        $query = Unit::with(['owner', 'governorate', 'type', 'media', 'amenities', 'ownership'])
             ->whereIn('status', ['available', 'sold', 'reserved'])
             ->where('is_visible', true);
 

@@ -39,18 +39,8 @@ class UnitListResource extends JsonResource
             "bathrooms" => $this->bathrooms ?? 0,
             "garages" => $this->garages ?? 0,
             "governorate" => new GovernorateResource($this->governorate),
-            "compound" => $this->whenLoaded("compound", function () use ($lang) {
-                return [
-                    "id" => $this->compound_id,
-                    "name" => ($lang === "ar" ? ($this->compound->name_ar ?? "") : ($this->compound->name_en ?? "")),
-                ];
-            }),
-            "developer" => $this->whenLoaded("developer", function () use ($lang) {
-                return [
-                    "id" => $this->developer_id,
-                    "name" => ($lang === "ar" ? ($this->developer->name_ar ?? "") : ($this->developer->name_en ?? "")),
-                ];
-            }),
+            "compound" => $this->when($this->compound_id, new CompoundResource($this->whenLoaded("compound"))),
+            "developer" => $this->when($this->developer_id, new DeveloperResource($this->whenLoaded("developer"))),
             "unit_type" => [
                 "id" => $this->unit_type_id,
                 "name" => ($lang === "ar" ? ($this->type->name_ar ?? "") : ($this->type->name_en ?? "")),

@@ -73,7 +73,7 @@ return [
         'instruction' => 'Please verify your email address to be able to login and use all features.',
         'action' => 'Verify Email Address',
         'footer' => 'If you did not create an account, no further action is required.',
-        'salutation' => 'Regards, Propix8',
+        'salutation' => 'Regards, aqarmousa',
         'not_verified' => 'Email is not verified.',
     ],
     'payment_initiated_successfully' => 'Payment initiated successfully',

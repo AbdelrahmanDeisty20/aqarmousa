@@ -4,7 +4,7 @@ return [
     // Greeting and general
     'greeting' => 'مرحباً :name،',
     'thank_you' => 'شكراً لاستخدامك منصتنا.',
-    'regards' => 'مع تحيات فريق Propix8',
+    'regards' => 'مع تحيات فريق عقار موسى',
 
     // Land references
     'unit_number' => 'الوحدة #:id',

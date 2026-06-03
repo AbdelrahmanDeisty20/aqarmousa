@@ -4,7 +4,7 @@ return [
     // Greeting and general
     'greeting' => 'Hello :name,',
     'thank_you' => 'Thank you for using our platform.',
-    'regards' => 'Best regards, Propix8 Team',
+    'regards' => 'Best regards, aqarmousa Team',
 
     // Land references
     'unit_number' => 'Land #:id',

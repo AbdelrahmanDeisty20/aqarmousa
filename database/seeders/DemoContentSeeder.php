@@ -69,26 +69,7 @@ class DemoContentSeeder extends Seeder
         $videoSource = base_path('images/' . $videoFile);
 
         // 1. Create Governorates
-        $governoratesData = [
-            ['en' => 'Cairo', 'ar' => 'القاهرة'],
-            ['en' => 'Giza', 'ar' => 'الجيزة'],
-            ['en' => 'Alexandria', 'ar' => 'الإسكندرية'],
-            ['en' => 'North Coast', 'ar' => 'الساحل الشمالي'],
-            ['en' => 'Ain Sokhna', 'ar' => 'العين السخنة'],
-            ['en' => 'New Capital', 'ar' => 'العاصمة الإدارية الجديدة'],
-            ['en' => '6th of October', 'ar' => 'السادس من أكتوبر'],
-            ['en' => 'Sheikh Zayed', 'ar' => 'الشيخ زايد'],
-            ['en' => 'New Cairo', 'ar' => 'القاهرة الجديدة'],
-            ['en' => 'Mansoura', 'ar' => 'المنصورة'],
-        ];
-
-        $governorates = [];
-        foreach ($governoratesData as $governorate) {
-            $governorates[] = Governorate::firstOrCreate(
-                ['name_en' => $governorate['en']],
-                ['name_ar' => $governorate['ar']]
-            );
-        }
+        $this->call(GovernorateSeeder::class);
 
         // 2. Create Unit Types
         $typesData = [

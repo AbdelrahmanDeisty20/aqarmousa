@@ -73,16 +73,16 @@ class DemoContentSeeder extends Seeder
 
         // 2. Create Unit Types
         $typesData = [
-            ['en' => 'Residential Unit', 'ar' => 'أرض سكنية', 'icon' => 'home', 'image_file' => 'villa.jpg'],
-            ['en' => 'Commercial Unit', 'ar' => 'أرض تجارية', 'icon' => 'store', 'image_file' => 'shop.jpg'],
-            ['en' => 'Agricultural Unit', 'ar' => 'أرض زراعية', 'icon' => 'nature', 'image_file' => 'chalet.jpg'],
-            ['en' => 'Industrial Unit', 'ar' => 'أرض صناعية', 'icon' => 'construction', 'image_file' => 'studio.jpg'],
+            ['en' => 'Residential Land', 'ar' => 'أرض سكنية', 'icon' => 'home', 'image_file' => 'villa.jpg'],
+            ['en' => 'Commercial Land', 'ar' => 'أرض تجارية', 'icon' => 'store', 'image_file' => 'shop.jpg'],
+            ['en' => 'Agricultural Land', 'ar' => 'أرض زراعية', 'icon' => 'nature', 'image_file' => 'chalet.jpg'],
+            ['en' => 'Industrial Land', 'ar' => 'أرض صناعية', 'icon' => 'construction', 'image_file' => 'studio.jpg'],
         ];
 
         $unitTypes = [];
         Storage::disk('public')->makeDirectory('unit-types');
         foreach ($typesData as $type) {
-            $sourceImage = base_path('unit types/' . $type['image_file']);
+            $sourceImage = base_path('land types/' . $type['image_file']);
             if (File::exists($sourceImage)) {
                 File::copy($sourceImage, Storage::disk('public')->path('unit-types/' . $type['image_file']));
             }
@@ -205,8 +205,8 @@ class DemoContentSeeder extends Seeder
         $statuses = ['available', 'available', 'available', 'available', 'sold', 'reserved'];
 
         Storage::disk('public')->makeDirectory('units');
-        $floorplanSource = base_path('unit types/floorplan.png');
-        $videoSource = base_path('unit types/videoplayback.mp4');
+        $floorplanSource = base_path('land types/floorplan.png');
+        $videoSource = base_path('land types/videoplayback.mp4');
 
         foreach ($compounds as $compound) {
             $numUnits = 7;
@@ -250,8 +250,8 @@ class DemoContentSeeder extends Seeder
                 }
 
                 $unit = Unit::create([
-                    'title_en' => ($category === 'land' ? 'Land ' : 'Property ') . $type->name_en . ' for ' . $selectedOfferType . ' in ' . $compound->name_en,
-                    'title_ar' => ($category === 'land' ? 'أرض ' : 'عقار ') . $type->name_ar . ' للـ ' . ($isSale ? 'بيع' : 'إيجار') . ' في ' . $compound->name_ar,
+                    'title_en' => $type->name_en . ' for ' . $selectedOfferType . ' in ' . $compound->name_en,
+                    'title_ar' => $type->name_ar . ' للـ ' . ($isSale ? 'بيع' : 'إيجار') . ' في ' . $compound->name_ar,
                     'description_en' => $fakerEn->realText(200),
                     'description_ar' => $arabicDescriptions[array_rand($arabicDescriptions)],
                     'address_ar' => $fakerAr->address,
@@ -299,14 +299,14 @@ class DemoContentSeeder extends Seeder
                 // Use the type-specific image
                 static $sharedTypeImages = [];
                 $imageFile = 'villa.jpg'; // fallback
-                if ($type->name_en === 'Commercial Unit') {
+                if ($type->name_en === 'Commercial Land') {
                     $imageFile = 'shop.jpg';
-                } elseif ($type->name_en === 'Agricultural Unit') {
+                } elseif ($type->name_en === 'Agricultural Land') {
                     $imageFile = 'chalet.jpg';
-                } elseif ($type->name_en === 'Industrial Unit') {
+                } elseif ($type->name_en === 'Industrial Land') {
                     $imageFile = 'studio.jpg';
                 }
-                $unitTypeSource = base_path('unit types/' . $imageFile);
+                $unitTypeSource = base_path('land types/' . $imageFile);
 
                 if (File::exists($unitTypeSource)) {
                     if (!isset($sharedTypeImages[$type->id])) {

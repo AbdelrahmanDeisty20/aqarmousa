@@ -17,17 +17,16 @@ class AmenitySeeder extends Seeder
     {
         $targetDir = 'amenities';
         $amenities = [
-            ['name_en' => 'Private Pool', 'name_ar' => 'حمام سباحة خاص', 'icon_file' => 'pool.jpg'],
-            ['name_en' => 'Shared Gym', 'name_ar' => 'صالة ألعاب رياضية مشتركة', 'icon_file' => 'gym.jpg'],
+            ['name_en' => 'Water Network', 'name_ar' => 'شبكة مياه', 'icon_file' => 'pool.jpg'],
+            ['name_en' => 'Agricultural Irrigation', 'name_ar' => 'مياه ري', 'icon_file' => 'garden.jpg'],
             ['name_en' => 'Security', 'name_ar' => 'أمن وحراسة', 'icon_file' => 'security.jpg'],
-            ['name_en' => 'Parking', 'name_ar' => 'موقف سيارات', 'icon_file' => 'parking.jpg'],
-            ['name_en' => 'Elevator', 'name_ar' => 'مصعد', 'icon_file' => 'elevator.jpg'],
-            ['name_en' => 'Garden', 'name_ar' => 'حديقة', 'icon_file' => 'garden.jpg'],
-            ['name_en' => 'Air conditioner', 'name_ar' => 'تكييف', 'icon_file' => 'airconditioner.jpg'],
-            ['name_en' => 'Maid Service', 'name_ar' => 'خدمة تنظيف', 'icon_file' => 'cleaning.jpg'],
-            ['name_en' => 'Maintenance Service', 'name_ar' => 'خدمة الصيانة', 'icon_file' => 'maintenance.jpg'],
+            ['name_en' => 'Paved Road', 'name_ar' => 'طريق ممهد', 'icon_file' => 'parking.jpg'],
+            ['name_en' => 'Building Permit', 'name_ar' => 'ترخيص بناء', 'icon_file' => 'elevator.jpg'],
+            ['name_en' => 'Fenced Land', 'name_ar' => 'سور محيط', 'icon_file' => 'gardens.jpg'],
+            ['name_en' => 'Electricity', 'name_ar' => 'كهرباء', 'icon_file' => 'airconditioner.jpg'],
+            ['name_en' => 'Sewage Network', 'name_ar' => 'شبكة صرف صحي', 'icon_file' => 'maintenance.jpg'],
+            ['name_en' => 'Natural Gas', 'name_ar' => 'غاز طبيعي', 'icon_file' => 'kitchenequipments.jpg'],
             ['name_en' => 'Sea View', 'name_ar' => 'إطلالة على البحر', 'icon_file' => 'seaview.jpg'],
-            ['name_en' => 'Kitchen Appliances', 'name_ar' => 'أجهزة مطبخ', 'icon_file' => 'kitchenequipments.jpg'],
         ];
 
         Storage::disk('public')->makeDirectory($targetDir);

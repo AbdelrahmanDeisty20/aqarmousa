@@ -18,18 +18,22 @@ return new class extends Migration
             $table->text('description_ar');
             $table->text('description_en')->nullable();
             $table->decimal('price', 15, 2);
+            $table->decimal('discount', 15, 2)->nullable(); // الخصم
             $table->decimal('price_per_m2', 10, 2)->nullable();
             $table->enum('offer_type', ['sale', 'rent']);
             $table->decimal('area', 8, 2);
+            $table->decimal('length', 8, 2)->nullable(); // الطول
+            $table->decimal('width', 8, 2)->nullable();  // العرض
+            $table->enum('category', ['land', 'property'])->default('land'); // تصنيف الوحدة: أرض أو عقار
             $table->integer('rooms')->nullable();
             $table->integer('bathrooms')->nullable();
             $table->integer('garages')->nullable();
-            $table->year('build_year')->nullable();
-            $table->decimal('land_area', 8, 2)->nullable();
-            $table->decimal('internal_area', 8, 2)->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->integer('build_year')->nullable();
+            $table->decimal('land_area', 10, 2)->nullable();
+            $table->decimal('internal_area', 10, 2)->nullable();
+            $table->enum('status', ['pending', 'available', 'rejected', 'sold', 'reserved'])->default('available');
             $table->foreignId('owner_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('city_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('governorate_id')->constrained()->cascadeOnDelete();
             $table->foreignId('unit_type_id')->constrained();
             $table->foreignId('compound_id')->nullable()
                 ->constrained()

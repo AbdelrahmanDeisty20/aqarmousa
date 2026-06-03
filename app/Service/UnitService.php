@@ -11,10 +11,10 @@ class UnitService
     public function getFilteredUnits(array $filters, $perPage = 10): LengthAwarePaginator
     {
         $query = Unit::query()
-            ->with(['owner', 'city', 'compound', 'developer', 'type', 'media', 'amenities'])
+            ->with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership'])
             ->withAvg('reviews', 'rating')
             ->withCount('reviews')
-            ->whereIn('status', ['approved', 'sold', 'rented']) // Only show approved/sold/rented units for public
+            ->whereIn('status', ['available', 'sold', 'reserved']) // Only show available/sold/reserved units for public
             ->where('is_visible', true);
 
         // Keyword Search
@@ -30,8 +30,8 @@ class UnitService
             });
         }
 
-        if (isset($filters['city_id'])) {
-            $query->where('city_id', $filters['city_id']);
+        if (isset($filters['governorate_id'])) {
+            $query->where('governorate_id', $filters['governorate_id']);
         }
 
         if (isset($filters['compound_id'])) {
@@ -52,6 +52,22 @@ class UnitService
 
         if (isset($filters['owner_id'])) {
             $query->where('owner_id', $filters['owner_id']);
+        }
+
+        if (isset($filters['category'])) {
+            $query->where('category', $filters['category']);
+        }
+
+        if (isset($filters['rooms'])) {
+            $query->where('rooms', $filters['rooms']);
+        }
+
+        if (isset($filters['bathrooms'])) {
+            $query->where('bathrooms', $filters['bathrooms']);
+        }
+
+        if (isset($filters['garages'])) {
+            $query->where('garages', $filters['garages']);
         }
 
         if (isset($filters['unit_type'])) {
@@ -84,15 +100,6 @@ class UnitService
             $query->where('price_per_m2', '<=', $filters['max_price_per_m2']);
         }
 
-        // Rooms & Bathrooms
-        if (isset($filters['rooms'])) {
-            $query->where('rooms', '=', $filters['rooms']);
-        }
-
-        if (isset($filters['bathrooms'])) {
-            $query->where('bathrooms', '=', $filters['bathrooms']);
-        }
-
         // Area Range
         if (isset($filters['min_area'])) {
             $query->where('area', '>=', $filters['min_area']);
@@ -102,27 +109,6 @@ class UnitService
             $query->where('area', '<=', $filters['max_area']);
         }
 
-        // Internal Area Range
-        if (isset($filters['min_internal_area'])) {
-            $query->where('internal_area', '>=', $filters['min_internal_area']);
-        }
-
-        if (isset($filters['max_internal_area'])) {
-            $query->where('internal_area', '<=', $filters['max_internal_area']);
-        }
-
-        if (isset($filters['build_year'])) {
-            $query->where('build_year', $filters['build_year']);
-        }
-
-        if (isset($filters['garages'])) {
-            $query->where('garages', '=', $filters['garages']);
-        }
-
-        if (isset($filters['min_land_area'])) {
-            $query->where('land_area', '>=', $filters['min_land_area']);
-        }
-
         // Amenities Filter (AND logic: must have ALL specified amenities)
         if (isset($filters['amenities']) && is_array($filters['amenities'])) {
             foreach ($filters['amenities'] as $amenityId) {
@@ -130,11 +116,6 @@ class UnitService
                     $q->where('amenities.id', $amenityId);
                 });
             }
-        }
-
-        // Development Status Filter
-        if (isset($filters['development_status'])) {
-            $query->where('development_status', $filters['development_status']);
         }
 
         // Sorting
@@ -166,34 +147,35 @@ class UnitService
 
     public function getUnitById(int $id): Unit
     {
-        return Unit::with(['owner', 'city', 'compound', 'developer', 'type', 'media', 'reviews.user', 'amenities'])
+        return Unit::with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'reviews.user', 'amenities', 'ownership'])
             ->withAvg('reviews', 'rating')
             ->withCount('reviews')
-            ->whereIn('status', ['approved', 'sold', 'rented'])
+            ->whereIn('status', ['available', 'sold', 'reserved'])
             ->where('is_visible', true)
             ->findOrFail($id);
     }
 
     public function getLatestUnits($limit = 6)
     {
-        return Unit::with(['owner', 'city', 'compound', 'developer', 'type', 'media', 'amenities'])
-            ->whereIn('status', ['approved', 'sold', 'rented'])
+        return Unit::with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership'])
+            ->whereIn('status', ['available', 'sold', 'reserved'])
             ->where('is_visible', true)
             ->latest()
             ->take($limit)
             ->get();
     }
+
     public function getRelatedUnits($unitId, $limit = 10)
     {
         $unit = Unit::findOrFail($unitId);
 
-        return Unit::with(['owner', 'city', 'compound', 'developer', 'type', 'media', 'amenities'])
-            ->whereIn('status', ['approved', 'sold', 'rented'])
+        return Unit::with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership'])
+            ->whereIn('status', ['available', 'sold', 'reserved'])
             ->where('is_visible', true)
             ->where('id', '!=', $unitId)
             ->where(function ($query) use ($unit) {
                 $query->where('unit_type_id', $unit->unit_type_id)
-                    ->orWhere('city_id', $unit->city_id);
+                    ->orWhere('governorate_id', $unit->governorate_id);
             })
             ->latest()
             ->take($limit)
@@ -202,16 +184,15 @@ class UnitService
 
     public function getNearbyUnits($user, $perPage = 10)
     {
-        $query = Unit::with(['owner', 'city', 'compound', 'developer', 'type', 'media', 'amenities'])
-            ->whereIn('status', ['approved', 'sold', 'rented'])
+        $query = Unit::with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership'])
+            ->whereIn('status', ['available', 'sold', 'reserved'])
             ->where('is_visible', true);
 
-
-        if (!$user || !$user->city_id) {
+        if (!$user || !$user->governorate_id) {
             return $query->where('id', 0)->paginate($perPage); // Return empty paginator
         }
 
-        return $query->where('city_id', $user->city_id)
+        return $query->where('governorate_id', $user->governorate_id)
             ->latest()
             ->paginate($perPage);
     }

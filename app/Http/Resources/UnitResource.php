@@ -21,7 +21,7 @@ class UnitResource extends JsonResource
             'price_per_m2' => $this->price_per_m2 ?? 0,
             'offer_type' => $this->offer_type ?? '',
             'area' => $this->area ?? 0,
-            'land_area' => $this->land_area ?? 0,
+            'unit_area' => $this->unit_area ?? 0,
             'internal_area' => $this->internal_area ?? 0,
             'rooms' => $this->rooms ?? 0,
             'bathrooms' => $this->bathrooms ?? 0,
@@ -29,6 +29,15 @@ class UnitResource extends JsonResource
             'build_year' => $this->build_year ?? '',
             'latitude' => $this->latitude ?? '',
             'longitude' => $this->longitude ?? '',
+            'category' => $this->category ?? 'land',
+            'discount' => $this->discount ?? 0,
+            'length' => $this->length ?? 0,
+            'width' => $this->width ?? 0,
+            'ownership' => $this->whenLoaded('ownership', fn() => [
+                'contract_type' => $this->ownership->contract_type ?? '',
+                'is_registered' => (bool) ($this->ownership->is_registered ?? false),
+                'plot_number' => $this->ownership->plot_number ?? '',
+            ]),
             'status' => $this->status ?? '',
             'is_favourite' => $this->when(auth('sanctum')->check(), function () {
                 return \App\Models\Favorite::where('user_id', auth('sanctum')->id())
@@ -45,7 +54,7 @@ class UnitResource extends JsonResource
             // Usually Objects are Nullable in Flutter models, but primitive types (String, int) are often strict.
             // I will focus on primitives first as requested.
             'media' => UnitMediaResource::collection($this->whenLoaded('media')),
-            'city' => new CityResource($this->whenLoaded('city')),
+            'governorate' => new GovernorateResource($this->whenLoaded('governorate')),
             'unit_type' => [
                 'id' => $this->whenLoaded('type', fn() => $this->type->id ?? 0),
                 'name' => $this->whenLoaded('type', fn() => (app()->getLocale() === 'ar' ? $this->type->name_ar : $this->type->name_en) ?? ''),

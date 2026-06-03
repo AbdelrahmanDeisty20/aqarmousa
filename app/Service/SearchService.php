@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Models\Unit;
-use App\Models\City;
+use App\Models\Governorate;
 use App\Models\Compound;
 use App\Models\UnitType;
 use App\Models\Developer;
@@ -17,7 +17,7 @@ class SearchService
         $words = explode(' ', $query);
         $q = '%' . $query . '%';
 
-        $units = Unit::with(['city', 'compound', 'developer', 'type', 'media'])
+        $units = Unit::with(['governorate', 'compound', 'developer', 'type', 'media'])
             ->where(function ($sub) use ($query, $words) {
                 // Search as whole phrase
                 $sub->where('title_ar', 'like', "%{$query}%")
@@ -35,7 +35,7 @@ class SearchService
                         ->orWhere('address_en', 'like', "%{$word}%");
                 }
 
-                $sub->orWhereHas('city', function ($q) use ($query) {
+                $sub->orWhereHas('governorate', function ($q) use ($query) {
                     $q->where('name_ar', 'like', "%{$query}%")
                         ->orWhere('name_en', 'like', "%{$query}%");
                 });
@@ -56,7 +56,7 @@ class SearchService
             ->take(20) // Increased limit to find more potential matches
             ->get();
 
-        $cities = City::where(function ($sub) use ($query, $words) {
+        $governorates = Governorate::where(function ($sub) use ($query, $words) {
             $sub->where('name_ar', 'like', "%{$query}%")
                 ->orWhere('name_en', 'like', "%{$query}%");
             foreach ($words as $word) {
@@ -69,7 +69,7 @@ class SearchService
             ->take(5)
             ->get();
 
-        $compounds = Compound::with('city')
+        $compounds = Compound::with('governorate')
             ->where(function ($sub) use ($query, $words) {
                 $sub->where('name_ar', 'like', "%{$query}%")
                     ->orWhere('name_en', 'like', "%{$query}%")
@@ -130,7 +130,7 @@ class SearchService
 
         return [
             'units' => $units,
-            'cities' => $cities,
+            'governorates' => $governorates,
             'compounds' => $compounds,
             'unit_types' => $unitTypes,
             'developers' => $developers,

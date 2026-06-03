@@ -62,7 +62,7 @@ public static function getNavigationBadge(): ?string
     public static function getGlobalSearchResultDetails(\Illuminate\Database\Eloquent\Model $record): array
     {
         return [
-            __('admin.resources.city') => $record->city?->{'name_' . app()->getLocale()} ?? $record->city?->name_ar,
+            __('admin.resources.governorate') => $record->governorate?->{'name_' . app()->getLocale()} ?? $record->governorate?->name_ar,
         ];
     }
 

@@ -37,14 +37,14 @@ class NewUnitAddedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         $title = $this->unit->title_ar ?: $this->unit->title_en ?: 'Unit';
-        $cityName = $notifiable->city ? ($notifiable->city->name_ar ?: $notifiable->city->name_en) : '';
+        $governorateName = $notifiable->governorate ? ($notifiable->governorate->name_ar ?: $notifiable->governorate->name_en) : '';
 
         return (new MailMessage)
             ->subject(__('api.notifications.new_unit_subject'))
             ->greeting(__('api.notifications.greeting', ['name' => $notifiable->name]))
             ->line(__('api.notifications.new_unit_body', [
                 'title' => $title,
-                'city' => $cityName
+                'governorate' => $governorateName
             ]))
             ->action(__('api.notifications.view_unit'), config('app.frontend_url') . '/property-details/' . $this->unit->id)
             ->line(__('api.notifications.thank_you'));

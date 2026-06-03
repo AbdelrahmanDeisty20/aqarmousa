@@ -43,28 +43,24 @@ class UnitForm
                             Select::make('status')
                                 ->label(__('admin.fields.status'))
                                 ->options([
-                                    // 'pending' => __('admin.fields.statuses.pending'),
-                                    'approved' => __('admin.fields.statuses.approved'),
-                                    // 'rejected' => __('admin.fields.statuses.rejected'),
+                                    'available' => __('admin.fields.statuses.available'),
                                     'sold' => __('admin.fields.statuses.sold'),
-                                    'rented' => __('admin.fields.statuses.rented'),
+                                    'reserved' => __('admin.fields.statuses.reserved'),
+                                    'pending' => __('admin.fields.statuses.pending'),
+                                    'rejected' => __('admin.fields.statuses.rejected'),
                                 ])
-                                ->default('approved')
+                                ->default('available')
                                 ->required(),
 
-                            Select::make('development_status')
-                                ->label(__('admin.fields.development_status'))
+                            Select::make('category')
+                                ->label(__('admin.fields.category' ?? 'Category'))
                                 ->options([
-                                    // 'under_construction' => __('admin.fields.development_statuses.under_construction'),
-                                    // 'ready' => __('admin.fields.development_statuses.ready'),
-                                    // 'handover_soon' => __('admin.fields.development_statuses.handover_soon'),
-                                    'primary' => __('admin.fields.development_statuses.primary'),
-                                    'resale' => __('admin.fields.development_statuses.resale'),
+                                    'land' => 'أرض (Land)',
+                                    'property' => 'عقار (Property)',
                                 ])
-                                ->default('primary')
-                                ->visible(fn(Get $get) => $get('offer_type') === 'sale')
-                                ->required(fn(Get $get) => $get('offer_type') === 'sale')
-                                ->nullable(),
+                                ->default('land')
+                                ->required()
+                                ->live(),
 
                             \Filament\Forms\Components\Toggle::make('is_visible')
                                 ->label(__('admin.fields.is_visible'))
@@ -82,6 +78,12 @@ class UnitForm
                                         ->prefix('EGP')
                                         ->required(),
 
+                                    TextInput::make('discount')
+                                        ->label(__('admin.fields.discount' ?? 'Discount'))
+                                        ->numeric()
+                                        ->prefix('EGP')
+                                        ->nullable(),
+
                                     Placeholder::make('sold_at_display')
                                         ->label(__('admin.fields.sold_at'))
                                         ->content(fn($record) => $record?->sold_at?->format('Y-m-d H:i') ?? '-')
@@ -90,12 +92,12 @@ class UnitForm
                                             $get('status') === 'sold' && $record?->sold_at
                                         ),
 
-                                    Placeholder::make('rented_at_display')
-                                        ->label(__('admin.fields.rented_at'))
-                                        ->content(fn($record) => $record?->rented_at?->format('Y-m-d H:i') ?? '-')
+                                    Placeholder::make('reserved_at_display')
+                                        ->label(__('admin.fields.reserved_at' ?? 'Reserved At'))
+                                        ->content(fn($record) => $record?->reserved_at?->format('Y-m-d H:i') ?? '-')
                                         ->visible(
                                             fn(Get $get, $record) =>
-                                            $get('status') === 'rented' && $record?->rented_at
+                                            $get('status') === 'reserved' && $record?->reserved_at
                                         ),
 
                                     TextInput::make('price_per_m2')
@@ -118,60 +120,110 @@ class UnitForm
                                         ->suffix('m²')
                                         ->required(),
 
-                                    TextInput::make('land_area')
-                                        ->label(__('admin.fields.land_area'))
+                                    TextInput::make('length')
+                                        ->label(__('admin.fields.length' ?? 'Length'))
                                         ->numeric()
-                                        ->nullable(),
+                                        ->suffix('m')
+                                        ->nullable()
+                                        ->visible(fn(Get $get) => $get('category') === 'land'),
+
+                                    TextInput::make('width')
+                                        ->label(__('admin.fields.width' ?? 'Width'))
+                                        ->numeric()
+                                        ->suffix('m')
+                                        ->nullable()
+                                        ->visible(fn(Get $get) => $get('category') === 'land'),
+
+                                    TextInput::make('rooms')
+                                        ->label(__('admin.fields.rooms' ?? 'Rooms'))
+                                        ->numeric()
+                                        ->nullable()
+                                        ->visible(fn(Get $get) => $get('category') === 'property'),
+
+                                    TextInput::make('bathrooms')
+                                        ->label(__('admin.fields.bathrooms' ?? 'Bathrooms'))
+                                        ->numeric()
+                                        ->nullable()
+                                        ->visible(fn(Get $get) => $get('category') === 'property'),
+
+                                    TextInput::make('garages')
+                                        ->label(__('admin.fields.garages' ?? 'Garages'))
+                                        ->numeric()
+                                        ->nullable()
+                                        ->visible(fn(Get $get) => $get('category') === 'property'),
+
+                                    TextInput::make('build_year')
+                                        ->label(__('admin.fields.build_year' ?? 'Build Year'))
+                                        ->numeric()
+                                        ->nullable()
+                                        ->visible(fn(Get $get) => $get('category') === 'property'),
+
+                                    TextInput::make('land_area')
+                                        ->label(__('admin.fields.land_area' ?? 'Land Area'))
+                                        ->numeric()
+                                        ->suffix('m²')
+                                        ->nullable()
+                                        ->visible(fn(Get $get) => $get('category') === 'property'),
 
                                     TextInput::make('internal_area')
-                                        ->label(__('admin.fields.internal_area'))
+                                        ->label(__('admin.fields.internal_area' ?? 'Internal Area'))
                                         ->numeric()
-                                        ->nullable(),
+                                        ->suffix('m²')
+                                        ->nullable()
+                                        ->visible(fn(Get $get) => $get('category') === 'property'),
+
+                                    Select::make('development_status')
+                                        ->label(__('admin.fields.development_status' ?? 'Development Status'))
+                                        ->options([
+                                            'under_construction' => __('admin.fields.development_statuses.under_construction'),
+                                            'ready' => __('admin.fields.development_statuses.ready'),
+                                            'handover_soon' => __('admin.fields.development_statuses.handover_soon'),
+                                            'primary' => __('admin.fields.development_statuses.primary'),
+                                            'resale' => __('admin.fields.development_statuses.resale'),
+                                        ])
+                                        ->nullable()
+                                        ->visible(fn(Get $get) => $get('category') === 'property'),
                                 ]),
 
                             \Filament\Schemas\Components\Section::make(__('admin.fields.features' ?? 'Features'))
                                 ->schema([
-                                    \Filament\Schemas\Components\Grid::make(4)
-                                        ->schema([
-                                            TextInput::make('rooms')
-                                                ->label(__('admin.fields.rooms'))
-                                                ->numeric()
-                                                ->nullable(),
-
-                                            TextInput::make('bathrooms')
-                                                ->label(__('admin.fields.bathrooms'))
-                                                ->numeric()
-                                                ->nullable(),
-
-                                            TextInput::make('garages')
-                                                ->label(__('admin.fields.garages'))
-                                                ->numeric()
-                                                ->nullable(),
-
-                                            TextInput::make('build_year')
-                                                ->label(__('admin.fields.build_year'))
-                                                ->numeric()
-                                                ->minValue(1900)
-                                                ->maxValue(date('Y') + 5)
-                                                ->nullable(),
-                                        ]),
                                     \Filament\Forms\Components\CheckboxList::make('amenities')
                                         ->label(__('admin.resources.amenities'))
                                         ->relationship('amenities', 'name_' . app()->getLocale())
                                         ->columns(2)
-                                        // ->grid(2)
                                         ->bulkToggleable()
                                         ->columnSpanFull(),
                                 ])->compact(),
+                        ]),
+
+                    \Filament\Schemas\Components\Tabs\Tab::make(__('admin.fields.ownership' ?? 'Ownership'))
+                        ->schema([
+                            \Filament\Schemas\Components\Grid::make(3)
+                                ->relationship('ownership')
+                                ->schema([
+                                    TextInput::make('contract_type')
+                                        ->label(__('admin.fields.contract_type' ?? 'Contract Type'))
+                                        ->maxLength(255)
+                                        ->nullable(),
+
+                                    TextInput::make('plot_number')
+                                        ->label(__('admin.fields.plot_number' ?? 'Plot Number'))
+                                        ->maxLength(255)
+                                        ->nullable(),
+
+                                    \Filament\Forms\Components\Toggle::make('is_registered')
+                                        ->label(__('admin.fields.is_registered' ?? 'Is Registered'))
+                                        ->default(false),
+                                ]),
                         ]),
 
                     \Filament\Schemas\Components\Tabs\Tab::make(__('admin.fields.relations' ?? 'Relations'))
                         ->schema([
                             \Filament\Schemas\Components\Grid::make(2)
                                 ->schema([
-                                    Select::make('city_id')
-                                        ->label(__('admin.resources.city'))
-                                        ->relationship('city', 'name_' . app()->getLocale())
+                                    Select::make('governorate_id')
+                                        ->label(__('admin.resources.governorate'))
+                                        ->relationship('governorate', 'name_' . app()->getLocale())
                                         ->searchable()
                                         ->preload()
                                         ->required(),
@@ -225,11 +277,13 @@ class UnitForm
                                         ->maxValue(180)
                                         ->helperText('الرقم الثاني في خرائط جوجل (بعد الفاصلة)')
                                         ->nullable(),
+
                                     TextInput::make('address_ar')
                                         ->label(__('admin.fields.address_ar'))
                                         ->columnSpanFull()
                                         ->required()
                                         ->maxLength(500),
+
                                     TextInput::make('address_en')
                                         ->label(__('admin.fields.address_en'))
                                         ->columnSpanFull()
@@ -251,6 +305,7 @@ class UnitForm
                                             : null)
                                         ->hidden(fn($get) => $get('type') !== 'video' || !$get('url'))
                                         ->columnSpanFull(),
+
                                     FileUpload::make('url')
                                         ->label(fn($get) => match ($get('type')) {
                                             'video' => __('admin.fields.media_types.video'),
@@ -260,7 +315,6 @@ class UnitForm
                                         ->helperText(fn($get) => match ($get('type')) {
                                             'video' => __('admin.fields.allowed_formats', ['formats' => 'mp4, mov, avi, webm']),
                                             'image' => __('admin.fields.allowed_formats', ['formats' => 'jpg, png, jpeg']),
-                                            // '3d' => __('admin.fields.allowed_formats', ['formats' => 'obj, fbx, glb, gltf']),
                                             'floorplan' => __('admin.fields.allowed_formats', ['formats' => 'jpg, png, jpeg']),
                                             default => __('admin.fields.keep_current'),
                                         })
@@ -272,12 +326,12 @@ class UnitForm
                                         ->openable()
                                         ->required(fn($context) => $context === 'create')
                                         ->live(),
+
                                     Select::make('type')
                                         ->label(__('admin.fields.type'))
                                         ->options([
                                             'image' => __('admin.fields.media_types.image'),
                                             'video' => __('admin.fields.media_types.video'),
-                                            // '3d' => __('admin.fields.media_types.3d'),
                                             'floorplan' => __('admin.fields.media_types.floorplan'),
                                         ])
                                         ->default('image')

@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\City;
+use App\Models\Governorate;
 use App\Models\Compound;
 use App\Models\Developer;
 use App\Models\Unit;
 use App\Models\UnitType;
 use App\Models\User;
 use App\Models\UnitMedia;
+use App\Models\Ownership;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
@@ -21,6 +22,19 @@ class DemoContentSeeder extends Seeder
 {
     public function run(): void
     {
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        \App\Models\Favorite::truncate();
+        \App\Models\Review::truncate();
+        \App\Models\Viewing::truncate();
+        \App\Models\UnitMedia::truncate();
+        \App\Models\Ownership::truncate();
+        \App\Models\Unit::truncate();
+        \App\Models\Compound::truncate();
+        \App\Models\Developer::truncate();
+        \App\Models\UnitType::truncate();
+        \App\Models\Governorate::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+
         $fakerAr = Faker::create('ar_EG');
         $fakerEn = Faker::create('en_US');
 
@@ -28,24 +42,22 @@ class DemoContentSeeder extends Seeder
 
         // Arabic descriptions for units and compounds
         $arabicDescriptions = [
-            'شقة فاخرة بتصميم عصري وإطلالة رائعة على المساحات الخضراء. تتميز بتشطيبات عالية الجودة ومساحات واسعة مناسبة للعائلات.',
-            'وحدة سكنية متميزة في موقع استراتيجي قريب من جميع الخدمات والمرافق الحيوية. تصميم معماري فريد يجمع بين الفخامة والراحة.',
-            'عقار راقي بمواصفات استثنائية يوفر أعلى مستويات الرفاهية والخصوصية. مثالي للباحثين عن حياة عصرية مريحة.',
-            'وحدة سكنية بتشطيبات فاخرة ومرافق متكاملة. موقع متميز يوفر سهولة الوصول لأهم المناطق الحيوية في المدينة.',
-            'شقة دوبلكس بتصميم عصري وتشطيبات خاصة. تحتوي على ريسبشن كبير ومطبخ أمريكي. الموقع قريب جداً من المدارس والجامعات، مما يجعلها مثالية للعائلات.',
-            'فيلا فاخرة محاطة بالحدائق والمساحات الخضراء. تصميم معماري فريد يجمع بين الأصالة والحداثة مع جميع وسائل الراحة العصرية.',
-            'تاون هاوس بموقع مميز وتصميم عملي يناسب الأسر الكبيرة. يتميز بمساحات واسعة وإطلالات خلابة على المناظر الطبيعية.',
-            'شاليه على البحر مباشرة بإطلالة بانورامية ساحرة. مثالي لقضاء عطلات صيفية لا تُنسى مع العائلة والأصدقاء.',
-            'بنتهاوس فاخر في الأدوار العليا مع تراس واسع وإطلالة بانورامية على المدينة. تشطيبات سوبر لوكس ومرافق حصرية.',
-            'ستوديو عصري بتصميم ذكي يستغل المساحة بشكل مثالي. مناسب للشباب والمحترفين الباحثين عن سكن عملي وأنيق.',
+            'أرض مميزة بموقع استراتيجي وإطلالة رائعة على مساحات خضراء. صالحة للبناء السكني ومكتملة المرافق.',
+            'أرض فضاء متميزة قريبة من جميع الخدمات والمرافق الحيوية في منطقة راقية وهادئة.',
+            'قطعة أرض استثنائية توفر أعلى مستويات الخصوصية بموقع حيوي ومثالي للاستثمار.',
+            'أرض تجارية وسكنية بموقع متميز يوفر سهولة الوصول لأهم الطرق والمناطق الحيوية بالمحافظة.',
+            'أرض مميزة بتصريح بناء سوبر لوكس وبنية تحتية كاملة من مياه وكهرباء وغاز طبيعي.',
+            'أرض فضاء محاطة بالكمبوندات الراقية والمناطق الخضراء، واجهة بحرية وتخطيط معماري ممتاز.',
+            'أرض فضاء بموقع مميز وتصميم مستطيل يسهل البناء عليه، قريبة من محور الخدمة الرئيسي.',
+            'أرض تطل على حديقة مركزية مباشرة وتتمتع بواجهة ممتازة في أرقى أحياء المحافظة.',
         ];
 
         $arabicCompoundDescriptions = [
-            'كمبوند سكني متكامل يوفر أرقى مستويات المعيشة مع مساحات خضراء واسعة ومرافق ترفيهية متنوعة. موقع استراتيجي يجمع بين الهدوء والقرب من المدينة.',
+            'كمبوند سكني متكامل يوفر أرقى مستويات المعيشة مع مساحات خضراء واسعة ومرافق ترفيهية متنوعة. موقع استراتيجي يجمع بين الهدوء والقرب من المحافظة.',
             'مشروع سكني فاخر بتصميم معماري عالمي يضم وحدات متنوعة تناسب جميع الاحتياجات. يتميز بالأمن والخصوصية والخدمات المتكاملة.',
             'مجتمع سكني راقي يجمع بين الطبيعة الخلابة والحياة العصرية. يحتوي على نوادي رياضية، مدارس دولية، ومراكز تجارية متكاملة.',
             'كمبوند حديث يوفر نمط حياة عصري ومتكامل مع جميع الخدمات والمرافق على أعلى مستوى. تصميمات معمارية فريدة ومساحات خضراء واسعة.',
-            'مشروع سكني متميز في قلب المدينة يجمع بين الموقع الاستراتيجي والتصميم العصري. يوفر بيئة آمنة ومريحة للعائلات.',
+            'مشروع سكني متميز في قلب المحافظة يجمع بين الموقع الاستراتيجي والتصميم العصري. يوفر بيئة آمنة ومريحة للعائلات.',
         ];
 
         // Ensure super_admin role exists
@@ -56,8 +68,8 @@ class DemoContentSeeder extends Seeder
         $videoFile = 'videoplayback.mp4';
         $videoSource = base_path('images/' . $videoFile);
 
-        // 1. Create Cities
-        $citiesData = [
+        // 1. Create Governorates
+        $governoratesData = [
             ['en' => 'Cairo', 'ar' => 'القاهرة'],
             ['en' => 'Giza', 'ar' => 'الجيزة'],
             ['en' => 'Alexandria', 'ar' => 'الإسكندرية'],
@@ -70,25 +82,20 @@ class DemoContentSeeder extends Seeder
             ['en' => 'Mansoura', 'ar' => 'المنصورة'],
         ];
 
-        $cities = [];
-        foreach ($citiesData as $city) {
-            $cities[] = City::firstOrCreate(
-                ['name_en' => $city['en']],
-                ['name_ar' => $city['ar']]
+        $governorates = [];
+        foreach ($governoratesData as $governorate) {
+            $governorates[] = Governorate::firstOrCreate(
+                ['name_en' => $governorate['en']],
+                ['name_ar' => $governorate['ar']]
             );
         }
 
         // 2. Create Unit Types
         $typesData = [
-            ['en' => 'Apartment', 'ar' => 'شقة', 'icon' => 'apartment', 'image_file' => 'apartment.jpg'],
-            ['en' => 'Villa', 'ar' => 'فيلا', 'icon' => 'villa', 'image_file' => 'villa.jpg'],
-            ['en' => 'Townhouse', 'ar' => 'تاون هاوس', 'icon' => 'home', 'image_file' => 'townhouse.jpg'],
-            ['en' => 'Twin House', 'ar' => 'توين هاوس', 'icon' => 'holiday_village', 'image_file' => 'twinhouse.jpg'],
-            ['en' => 'Chalet', 'ar' => 'شاليه', 'icon' => 'beach_access', 'image_file' => 'chalet.jpg'],
-            ['en' => 'Duplex', 'ar' => 'دوبلكس', 'icon' => 'stairs', 'image_file' => 'duplex.jpg'],
-            ['en' => 'Penthouse', 'ar' => 'بنتهاوس', 'icon' => 'deck', 'image_file' => 'penthouse.jpg'],
-            ['en' => 'Studio', 'ar' => 'ستوديو', 'icon' => 'weekend', 'image_file' => 'studio.jpg'],
-            ['en' => 'Shop', 'ar' => 'محلات', 'icon' => 'store', 'image_file' => 'shop.jpg'],
+            ['en' => 'Residential Unit', 'ar' => 'أرض سكنية', 'icon' => 'home', 'image_file' => 'villa.jpg'],
+            ['en' => 'Commercial Unit', 'ar' => 'أرض تجارية', 'icon' => 'store', 'image_file' => 'shop.jpg'],
+            ['en' => 'Agricultural Unit', 'ar' => 'أرض زراعية', 'icon' => 'nature', 'image_file' => 'chalet.jpg'],
+            ['en' => 'Industrial Unit', 'ar' => 'أرض صناعية', 'icon' => 'construction', 'image_file' => 'studio.jpg'],
         ];
 
         $unitTypes = [];
@@ -144,7 +151,6 @@ class DemoContentSeeder extends Seeder
             ['name_en' => 'Misr Italia', 'name_ar' => 'مصر إيطاليا'],
         ];
 
-        // 4. Create Developers
         $developers = [];
         Storage::disk('public')->makeDirectory('developers');
         foreach ($developersData as $devData) {
@@ -168,22 +174,22 @@ class DemoContentSeeder extends Seeder
 
         // 5. Create Compounds
         $compoundsData = [
-            ['name_en' => 'Marassi', 'name_ar' => 'مراسي', 'city' => 'North Coast', 'dev' => 'Emaar Misr'],
-            ['name_en' => 'Mivida', 'name_ar' => 'ميفيدا', 'city' => 'New Cairo', 'dev' => 'Emaar Misr'],
-            ['name_en' => 'SODIC West', 'name_ar' => 'سوديك ويست', 'city' => 'Sheikh Zayed', 'dev' => 'SODIC'],
-            ['name_en' => 'IL Monte Galala', 'name_ar' => 'المونت جلالة', 'city' => 'Ain Sokhna', 'dev' => 'Tatweer Misr'],
-            ['name_en' => 'Palm Hills Alexandria', 'name_ar' => 'بالم هيلز الإسكندرية', 'city' => 'Alexandria', 'dev' => 'Palm Hills'],
-            ['name_en' => 'Noor City', 'name_ar' => 'نور سيتي', 'city' => 'New Capital', 'dev' => 'Talaat Moustafa Group (TMG)'],
-            ['name_en' => 'Badya', 'name_ar' => 'بادية', 'city' => '6th of October', 'dev' => 'Palm Hills'],
-            ['name_en' => 'Heliopolis Gardens', 'name_ar' => 'حدائق مصر الجديدة', 'city' => 'Cairo', 'dev' => 'Emaar Misr'],
-            ['name_en' => 'Pyramids Heights', 'name_ar' => 'مرتفعات الأهرام', 'city' => 'Giza', 'dev' => 'SODIC'],
-            ['name_en' => 'Mansoura Gardens', 'name_ar' => 'حدائق المنصورة', 'city' => 'Mansoura', 'dev' => 'Mountain View'],
+            ['name_en' => 'Marassi', 'name_ar' => 'مراسي', 'governorate' => 'North Coast', 'dev' => 'Emaar Misr'],
+            ['name_en' => 'Mivida', 'name_ar' => 'ميفيدا', 'governorate' => 'New Cairo', 'dev' => 'Emaar Misr'],
+            ['name_en' => 'SODIC West', 'name_ar' => 'سوديك ويست', 'governorate' => 'Sheikh Zayed', 'dev' => 'SODIC'],
+            ['name_en' => 'IL Monte Galala', 'name_ar' => 'المونت جلالة', 'governorate' => 'Ain Sokhna', 'dev' => 'Tatweer Misr'],
+            ['name_en' => 'Palm Hills Alexandria', 'name_ar' => 'بالم هيلز الإسكندرية', 'governorate' => 'Alexandria', 'dev' => 'Palm Hills'],
+            ['name_en' => 'Noor Governorate', 'name_ar' => 'نور سيتي', 'governorate' => 'New Capital', 'dev' => 'Talaat Moustafa Group (TMG)'],
+            ['name_en' => 'Badya', 'name_ar' => 'بادية', 'governorate' => '6th of October', 'dev' => 'Palm Hills'],
+            ['name_en' => 'Heliopolis Gardens', 'name_ar' => 'حدائق مصر الجديدة', 'governorate' => 'Cairo', 'dev' => 'Emaar Misr'],
+            ['name_en' => 'Pyramids Heights', 'name_ar' => 'مرتفعات الأهرام', 'governorate' => 'Giza', 'dev' => 'SODIC'],
+            ['name_en' => 'Mansoura Gardens', 'name_ar' => 'حدائق المنصورة', 'governorate' => 'Mansoura', 'dev' => 'Mountain View'],
         ];
 
         $compounds = [];
 
-        // Real coordinates for each city in Egypt
-        $cityCoordinates = [
+        // Real coordinates for each governorate in Egypt
+        $governorateCoordinates = [
             'Cairo' => ['lat' => 30.0444, 'lng' => 31.2357],
             'Giza' => ['lat' => 30.0131, 'lng' => 31.2089],
             'Alexandria' => ['lat' => 31.2001, 'lng' => 29.9187],
@@ -197,21 +203,17 @@ class DemoContentSeeder extends Seeder
         ];
 
         foreach ($compoundsData as $comp) {
-            $city = City::where('name_en', $comp['city'])->first();
+            $governorate = Governorate::where('name_en', $comp['governorate'])->first();
             $dev = Developer::where('name_en', $comp['dev'])->first();
 
-            if ($city && $dev) {
-                $coords = $cityCoordinates[$comp['city']] ?? ['lat' => 30.0444, 'lng' => 31.2357];
-
+            if ($governorate && $dev) {
                 $compounds[] = Compound::firstOrCreate(
                     ['name_en' => $comp['name_en']],
                     [
                         'name_ar' => $comp['name_ar'],
                         'description_en' => $fakerEn->paragraph,
                         'description_ar' => $arabicCompoundDescriptions[array_rand($arabicCompoundDescriptions)],
-                        'city_id' => $city->id,
-                        'latitude' => $coords['lat'] + (rand(-100, 100) / 10000), // Slight offset
-                        'longitude' => $coords['lng'] + (rand(-100, 100) / 10000),
+                        'governorate_id' => $governorate->id,
                     ]
                 );
             }
@@ -219,6 +221,7 @@ class DemoContentSeeder extends Seeder
 
         // 6. Create Units
         $offerTypes = ['sale', 'rent'];
+        $statuses = ['available', 'available', 'available', 'available', 'sold', 'reserved'];
 
         Storage::disk('public')->makeDirectory('units');
         $floorplanSource = base_path('unit types/floorplan.png');
@@ -232,40 +235,79 @@ class DemoContentSeeder extends Seeder
                 $type = $unitTypes[array_rand($unitTypes)];
                 $dev = $developers[array_rand($developers)];
 
-                $price = ($type->name_en == 'Villa' || $type->name_en == 'Twin House')
-                        ? $fakerEn->numberBetween(5000000, 50000000)
-                        : $fakerEn->numberBetween(1500000, 8000000);
+                $price = $fakerEn->numberBetween(1000000, 15000000);
+                $discount = (rand(0, 4) === 0) ? $fakerEn->numberBetween(50000, 500000) : null;
 
                 $selectedOfferType = $offerTypes[array_rand($offerTypes)];
+                $selectedStatus = $statuses[array_rand($statuses)];
                 $isSale = ($selectedOfferType == 'sale');
 
-                // development_status: primary/resale للبيع، null للإيجار
-                $developmentStatus = $isSale ? (['primary', 'resale'][array_rand(['primary', 'resale'])]) : '';
+                $category = (rand(0, 1) === 0) ? 'land' : 'property';
+
+                if ($category === 'land') {
+                    $length = $fakerEn->numberBetween(20, 80);
+                    $width = $fakerEn->numberBetween(15, 60);
+                    $area = $length * $width;
+                    $rooms = null;
+                    $bathrooms = null;
+                    $garages = null;
+                    $buildYear = null;
+                    $internalArea = null;
+                    $landArea = null;
+                    $devStatus = null;
+                } else {
+                    $length = null;
+                    $width = null;
+                    $area = $fakerEn->numberBetween(80, 400);
+                    $rooms = $fakerEn->numberBetween(2, 6);
+                    $bathrooms = $fakerEn->numberBetween(1, 4);
+                    $garages = $fakerEn->numberBetween(0, 2);
+                    $buildYear = $fakerEn->numberBetween(2010, 2024);
+                    $internalArea = $area - $fakerEn->numberBetween(10, 50);
+                    $landArea = $area + $fakerEn->numberBetween(20, 100);
+                    $devStatus = ['under_construction', 'ready', 'handover_soon', 'primary', 'resale'][rand(0, 4)];
+                }
 
                 $unit = Unit::create([
-                    'title_en' => $type->name_en . ' for ' . $selectedOfferType . ' in ' . $compound->name_en,
-                    'title_ar' => $type->name_ar . ' للـ ' . ($isSale ? 'بيع' : 'إيجار') . ' في ' . $compound->name_ar,
+                    'title_en' => ($category === 'land' ? 'Land ' : 'Property ') . $type->name_en . ' for ' . $selectedOfferType . ' in ' . $compound->name_en,
+                    'title_ar' => ($category === 'land' ? 'أرض ' : 'عقار ') . $type->name_ar . ' للـ ' . ($isSale ? 'بيع' : 'إيجار') . ' في ' . $compound->name_ar,
                     'description_en' => $fakerEn->realText(200),
                     'description_ar' => $arabicDescriptions[array_rand($arabicDescriptions)],
-                    'address' => $fakerAr->address,
+                    'address_ar' => $fakerAr->address,
+                    'address_en' => $fakerEn->address,
                     'price' => $price,
-                    'price_per_m2' => $price / 100, // rough estimate
+                    'discount' => $discount,
+                    'price_per_m2' => $price / $area,
                     'offer_type' => $selectedOfferType,
-                    'area' => $fakerEn->numberBetween(80, 500),
-                    'rooms' => $fakerEn->numberBetween(1, 6),
-                    'bathrooms' => $fakerEn->numberBetween(1, 4),
-                    'garages' => $fakerEn->numberBetween(0, 2),
-                    'build_year' => $fakerEn->year,
-                    'status' => 'approved', // Active/Approved
+                    'area' => $area,
+                    'length' => $length,
+                    'width' => $width,
+                    'category' => $category,
+                    'rooms' => $rooms,
+                    'bathrooms' => $bathrooms,
+                    'garages' => $garages,
+                    'build_year' => $buildYear,
+                    'internal_area' => $internalArea,
+                    'land_area' => $landArea,
+                    'development_status' => $devStatus,
+                    'status' => $selectedStatus,
                     'is_visible' => true,
-                    'development_status' => $developmentStatus,
                     'owner_id' => $seller->id,
-                    'city_id' => $compound->city_id,
+                    'governorate_id' => $compound->governorate_id,
                     'unit_type_id' => $type->id,
                     'compound_id' => $compound->id,
                     'developer_id' => $dev->id,
-                    'latitude' => $compound->latitude + (rand(-100, 100) / 10000), // Slight offset
-                    'longitude' => $compound->longitude + (rand(-100, 100) / 10000),
+                    'latitude' => ($governorateCoordinates[$compound->governorate->name_en] ?? ['lat' => 30.0444, 'lng' => 31.2357])['lat'] + (rand(-100, 100) / 10000), // Slight offset
+                    'longitude' => ($governorateCoordinates[$compound->governorate->name_en] ?? ['lat' => 30.0444, 'lng' => 31.2357])['lng'] + (rand(-100, 100) / 10000),
+                    'sold_at' => ($selectedStatus === 'sold') ? now()->subDays(rand(1, 30)) : null,
+                    'reserved_at' => ($selectedStatus === 'reserved') ? now()->subDays(rand(1, 10)) : null,
+                ]);
+
+                // Create Ownership details for the unit
+                $unit->ownership()->create([
+                    'contract_type' => ['سند ملكية مسجل', 'عقد بيع ابتدائي', 'عقد نهائي صحة ونفاذ', 'عقد ملكية حيازة'][array_rand(['سند ملكية مسجل', 'عقد بيع ابتدائي', 'عقد نهائي صحة ونفاذ', 'عقد ملكية حيازة'])],
+                    'is_registered' => (rand(0, 1) === 1),
+                    'plot_number' => 'أرض رقم ' . $fakerEn->numberBetween(100, 999),
                 ]);
 
                 if (!empty($amenityIds)) {
@@ -275,18 +317,14 @@ class DemoContentSeeder extends Seeder
 
                 // Use the type-specific image
                 static $sharedTypeImages = [];
-                $typeImages = [
-                    'Apartment' => 'apartment.jpg',
-                    'Villa' => 'villa.jpg',
-                    'Townhouse' => 'townhouse.jpg',
-                    'Twin House' => 'twinhouse.jpg',
-                    'Chalet' => 'chalet.jpg',
-                    'Duplex' => 'duplex.jpg',
-                    'Penthouse' => 'penthouse.jpg',
-                    'Studio' => 'studio.jpg',
-                    'Shop' => 'shop.jpg',
-                ];
-                $imageFile = $typeImages[$type->name_en] ?? 'apartment.jpg';
+                $imageFile = 'villa.jpg'; // fallback
+                if ($type->name_en === 'Commercial Unit') {
+                    $imageFile = 'shop.jpg';
+                } elseif ($type->name_en === 'Agricultural Unit') {
+                    $imageFile = 'chalet.jpg';
+                } elseif ($type->name_en === 'Industrial Unit') {
+                    $imageFile = 'studio.jpg';
+                }
                 $unitTypeSource = base_path('unit types/' . $imageFile);
 
                 if (File::exists($unitTypeSource)) {

@@ -24,8 +24,8 @@ class ContentSeeder extends Seeder
             [
                 'question_ar' => 'كيف يمكنني البحث عن عقار؟',
                 'question_en' => 'How can I search for a property?',
-                'answer_ar' => 'يمكنك استخدام محرك البحث المتقدم في الموقع لتصفية العقارات حسب المدينة، النوع، السعر، والمساحة. كما يمكنك التواصل مع فريقنا للحصول على مساعدة شخصية.',
-                'answer_en' => 'You can use our advanced search engine to filter properties by city, type, price, and area. You can also contact our team for personalized assistance.',
+                'answer_ar' => 'يمكنك استخدام محرك البحث المتقدم في الموقع لتصفية العقارات حسب المحافظة، النوع، السعر، والمساحة. كما يمكنك التواصل مع فريقنا للحصول على مساعدة شخصية.',
+                'answer_en' => 'You can use our advanced search engine to filter properties by governorate, type, price, and area. You can also contact our team for personalized assistance.',
             ],
             [
                 'question_ar' => 'ما هي الأوراق المطلوبة لشراء عقار؟',

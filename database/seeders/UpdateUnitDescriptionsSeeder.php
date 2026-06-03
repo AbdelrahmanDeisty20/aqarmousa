@@ -28,10 +28,10 @@ class UpdateUnitDescriptionsSeeder extends Seeder
                 'address_en' => "Sheikh Zayed, Diplomatic Quarter, Jasmine Compound",
             ],
             [
-                'ar' => "وحدة تجارية (مكتب) في موقع حيوي بقلب المدينة. المكتب مجهز بالكامل وجاهز للعمل فوراً. المبنى حديث ويحتوي على مصاعد وأمن 24 ساعة، وقريب من وسائل المواصلات.",
-                'en' => "Commercial unit (office) in a vital location in the heart of the city. The office is fully equipped and ready for immediate work. The building is modern, featuring elevators and 24-hour security, and is close to transportation.",
-                'address_ar' => "مدينة نصر، شارع عباس العقاد، برج النور",
-                'address_en' => "Nasr City, Abbas El Akkad St, Al Noor Tower",
+                'ar' => "وحدة تجارية (مكتب) في موقع حيوي بقلب المحافظة. المكتب مجهز بالكامل وجاهز للعمل فوراً. المبنى حديث ويحتوي على مصاعد وأمن 24 ساعة، وقريب من وسائل المواصلات.",
+                'en' => "Commercial unit (office) in a vital location in the heart of the governorate. The office is fully equipped and ready for immediate work. The building is modern, featuring elevators and 24-hour security, and is close to transportation.",
+                'address_ar' => "محافظة نصر، شارع عباس العقاد، برج النور",
+                'address_en' => "Nasr Governorate, Abbas El Akkad St, Al Noor Tower",
             ],
             [
                 'ar' => "شاليه بإطلالة مباشرة على البحر، مثالي لقضاء العطلات الصيفية. الشاليه مفروش بالكامل بأثاث مودرن، ويحتوي على تراس كبير. الكمبوند به حمامات سباحة وخدمات ترفيهية.",
@@ -40,8 +40,8 @@ class UpdateUnitDescriptionsSeeder extends Seeder
                 'address_en' => "North Coast, Sidi Abdel Rahman, Amwaj Village",
             ],
             [
-                'ar' => "روف مميز بمساحة مبنية وتراس خارجي ضخم. يتمتع بفيو مفتوح ورائع للمدينة. فرصة مميزة لمحبي الخصوصية والهدوء وللإستمتاع بالهواء الطلق.",
-                'en' => "Distinctive penthouse with built-up area and a huge outdoor terrace. It enjoys a wonderful open view of the city. A unique opportunity for lovers of privacy and tranquility and enjoying the outdoors.",
+                'ar' => "روف مميز بمساحة مبنية وتراس خارجي ضخم. يتمتع بفيو مفتوح ورائع للمحافظة. فرصة مميزة لمحبي الخصوصية والهدوء وللإستمتاع بالهواء الطلق.",
+                'en' => "Distinctive penthouse with built-up area and a huge outdoor terrace. It enjoys a wonderful open view of the governorate. A unique opportunity for lovers of privacy and tranquility and enjoying the outdoors.",
                 'address_ar' => "المعادي، سرايات المعادي، شارع 9",
                 'address_en' => "Maadi, Sarayat Maadi, Street 9",
             ],

@@ -70,7 +70,7 @@ class PaymobService
             'phone_number' => $user->phone ?? '0123456789',
             'shipping_method' => 'NA',
             'postal_code' => 'NA',
-            'city' => 'Cairo',
+            'governorate' => 'Cairo',
             'country' => 'EG',
             'last_name' => $user->name ?? 'User',
             'state' => 'NA',

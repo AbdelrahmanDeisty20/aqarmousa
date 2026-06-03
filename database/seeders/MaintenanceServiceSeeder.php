@@ -36,7 +36,7 @@ class MaintenanceServiceSeeder extends Seeder
             ],
             [
                 'title_ar' => 'تنسيق الحدائق',
-                'title_en' => 'Landscaping & Gardening',
+                'title_en' => 'Unitscaping & Gardening',
                 'category' => 'home',
                 'image' => 'maintenance-services/gardens.jpg',
             ],

@@ -52,18 +52,11 @@ class Unit extends Model
 
     protected static function booted()
     {
-        static::saving(function (Unit $unit) {
-            // Final safety net: ensure development_status is cleared if it's a rental unit
-            if (static::isRent($unit->offer_type)) {
-                $unit->development_status = null;
-            }
-        });
-
         static::creating(function (Unit $unit) {
             // Ensure imported units (or any unit created without these values)
             // get the desired defaults.
             if (!isset($unit->status) || empty($unit->status)) {
-                $unit->status = 'approved';
+                $unit->status = 'available';
             }
 
             if (!isset($unit->is_visible)) {
@@ -72,37 +65,26 @@ class Unit extends Model
         });
 
         static::created(function (Unit $unit) {
-            if ($unit->status === 'approved') {
-                $unit->notifyBuyersInCity();
+            if ($unit->status === 'available') {
+                $unit->notifyBuyersInGovernorate();
             }
         });
 
         static::updated(function (Unit $unit) {
-            if ($unit->wasChanged('status') && $unit->status === 'approved') {
-                $unit->notifyBuyersInCity();
+            if ($unit->wasChanged('status') && $unit->status === 'available') {
+                $unit->notifyBuyersInGovernorate();
             }
         });
     }
 
     /**
-     * Enforce business rules for development status.
-     * Rent units should not have a development status.
+     * Notify all verified buyers in the same governorate about the new unit.
      */
-    public function enforceDevelopmentStatusRules(): void
-    {
-        if (static::isRent($this->offer_type)) {
-            $this->development_status = null;
-        }
-    }
-
-    /**
-     * Notify all verified buyers in the same city about the new unit.
-     */
-    public function notifyBuyersInCity()
+    public function notifyBuyersInGovernorate()
     {
         /** @var \App\Models\User[] $buyers */
         $buyers = \App\Models\User::where('role', 'buyer')
-            ->where('city_id', $this->city_id)
+            ->where('governorate_id', $this->governorate_id)
             ->whereNotNull('email_verified_at')
             ->get();
 
@@ -121,25 +103,29 @@ class Unit extends Model
         'address_ar',
         'address_en',
         'price',
+        'discount',
         'price_per_m2',
         'offer_type',
         'area',
+        'length',
+        'width',
+        'category', // أرض أم عقار (land / property)
         'rooms',
         'bathrooms',
         'garages',
         'build_year',
         'land_area',
         'internal_area',
+        'development_status',
         'status',
-        'city_id',
+        'governorate_id',
         'unit_type_id',
         'compound_id',
         'developer_id',
         'latitude',
         'longitude',
         'sold_at',
-        'rented_at',
-        'development_status',
+        'reserved_at',
         'is_visible',
     ];
 
@@ -148,9 +134,9 @@ class Unit extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function city()
+    public function governorate()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(Governorate::class);
     }
 
     public function compound()
@@ -193,6 +179,11 @@ class Unit extends Model
         return $this->belongsToMany(Amenity::class);
     }
 
+    public function ownership()
+    {
+        return $this->hasOne(Ownership::class, 'unit_id');
+    }
+
     public function getTitleAttribute()
     {
         $locale = app()->getLocale();
@@ -217,7 +208,7 @@ class Unit extends Model
             'latitude' => 'decimal:8',
             'longitude' => 'decimal:8',
             'sold_at' => 'datetime',
-            'rented_at' => 'datetime',
+            'reserved_at' => 'datetime',
             'is_visible' => 'boolean',
         ];
     }

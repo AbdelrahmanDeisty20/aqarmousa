@@ -43,7 +43,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'status',
         'avatar',
         'id_photo',
-        'city_id',
+        'governorate_id',
         'email_verified_at',
     ];
 
@@ -67,9 +67,9 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return $this->hasMany(Unit::class, 'owner_id');
     }
 
-    public function city()
+    public function governorate()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(Governorate::class);
     }
 
     public function favorites()

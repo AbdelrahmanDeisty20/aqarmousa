@@ -20,7 +20,7 @@ class VerificationActionRestrictionTest extends TestCase
             'unit_id' => $unit->id,
         ]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(409);
     }
 
     public function test_unverified_user_cannot_store_review()
@@ -34,7 +34,7 @@ class VerificationActionRestrictionTest extends TestCase
             'comment' => 'Great unit!',
         ]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(409);
     }
 
     public function test_unverified_user_cannot_store_testimonial()
@@ -45,7 +45,7 @@ class VerificationActionRestrictionTest extends TestCase
             'content' => 'Great service!',
         ]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(409);
     }
 
     public function test_verified_user_can_access_restricted_routes()

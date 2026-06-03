@@ -58,9 +58,9 @@ class UserForm
                     ->openable()
                     ->nullable()
                     ->visible(fn(Get $get) => $get('role') === 'seller'),
-                Select::make('city_id')
-                    ->label(__('admin.fields.city'))
-                    ->relationship('city', 'name_ar')
+                Select::make('governorate_id')
+                    ->label(__('admin.fields.governorate'))
+                    ->relationship('governorate', 'name_ar')
                     ->searchable()
                     ->preload()
                     ->nullable(),

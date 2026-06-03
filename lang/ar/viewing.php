@@ -6,7 +6,7 @@ return [
     'navigation_label' => 'المعاينات',
     'columns' => [
         'user' => 'المستخدم',
-        'unit' => 'الوحدة',
+        'land' => 'الوحدة',
         'client_name' => 'اسم العميل',
         'phone' => 'رقم الهاتف',
         'date' => 'التاريخ',
@@ -42,7 +42,7 @@ return [
     ],
     'fields' => [
         'user' => 'المستخدم',
-        'unit' => 'الوحدة',
+        'land' => 'الوحدة',
         'client_name' => 'اسم العميل',
         'email' => 'البريد الإلكتروني',
         'phone' => 'رقم الهاتف',
@@ -65,7 +65,7 @@ return [
         'until' => 'إلى',
         'user' => 'المستخدم',
         'all_users' => 'جميع المستخدمين',
-        'unit' => 'الوحدة',
+        'land' => 'الوحدة',
         'all_units' => 'جميع الوحدات',
     ],
     'search_placeholder' => 'بحث',

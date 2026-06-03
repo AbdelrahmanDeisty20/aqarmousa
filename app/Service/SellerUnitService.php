@@ -9,11 +9,11 @@ class SellerUnitService
 {
     public function getSellerUnits($user, array $filters = [], $perPage = 10)
     {
-        $query = Unit::with(['owner', 'city', 'compound', 'developer', 'type', 'media', 'amenities'])
+        $query = Unit::with(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership'])
             ->where('owner_id', $user->id);
 
-        if (isset($filters['city_id'])) {
-            $query->where('city_id', $filters['city_id']);
+        if (isset($filters['governorate_id'])) {
+            $query->where('governorate_id', $filters['governorate_id']);
         }
 
         if (isset($filters['compound_id'])) {
@@ -30,6 +30,10 @@ class SellerUnitService
 
         if (isset($filters['status'])) {
             $query->where('status', $filters['status']);
+        }
+
+        if (isset($filters['category'])) {
+            $query->where('category', $filters['category']);
         }
 
         // Price Range
@@ -58,6 +62,10 @@ class SellerUnitService
         $media = $data['media'] ?? [];
         unset($data['media']);
 
+        // Handle ownership data if provided
+        $ownershipData = $data['ownership'] ?? null;
+        unset($data['ownership']);
+
         $data['owner_id'] = $user->id;
         $data['status'] = 'pending';
 
@@ -67,11 +75,15 @@ class SellerUnitService
             $unit->amenities()->sync($data['amenities']);
         }
 
+        if ($ownershipData) {
+            $unit->ownership()->create($ownershipData);
+        }
+
         foreach ($media as $item) {
             $this->uploadMedia($unit, $item['file'], $item['type']);
         }
 
-        return $unit->load(['owner', 'city', 'compound', 'developer', 'type', 'media', 'amenities']);
+        return $unit->load(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership']);
     }
 
     public function updateUnit($user, Unit $unit, array $data): Unit
@@ -79,6 +91,10 @@ class SellerUnitService
         if ($unit->owner_id !== $user->id) {
             abort(403, 'Unauthorized action.');
         }
+
+        // Handle ownership data
+        $ownershipData = $data['ownership'] ?? null;
+        unset($data['ownership']);
 
         // Filter out empty or null values to keep old values
         $data = array_filter($data, function ($value) {
@@ -92,7 +108,11 @@ class SellerUnitService
             $unit->amenities()->sync($data['amenities']);
         }
 
-        return $unit->load(['owner', 'city', 'compound', 'developer', 'type', 'media', 'amenities']);
+        if ($ownershipData) {
+            $unit->ownership()->updateOrCreate([], $ownershipData);
+        }
+
+        return $unit->load(['owner', 'governorate', 'compound', 'developer', 'type', 'media', 'amenities', 'ownership']);
     }
 
     public function deleteUnit($user, Unit $unit): void
@@ -127,11 +147,12 @@ class SellerUnitService
 
         return [
             'total_units' => Unit::where('owner_id', $userId)->count(),
-            'approved_units' => Unit::where('owner_id', $userId)->where('status', 'approved')->count(),
+            'available_units' => Unit::where('owner_id', $userId)->where('status', 'available')->count(),
             'pending_units' => Unit::where('owner_id', $userId)->where('status', 'pending')->count(),
             'rejected_units' => Unit::where('owner_id', $userId)->where('status', 'rejected')->count(),
         ];
     }
+
     public function toggleVisibility($user, Unit $unit): Unit
     {
         if ($unit->owner_id !== $user->id) {

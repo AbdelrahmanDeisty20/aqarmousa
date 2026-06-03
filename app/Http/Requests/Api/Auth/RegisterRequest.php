@@ -33,7 +33,7 @@ class RegisterRequest extends FormRequest
             'address' => 'nullable|string|max:500',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'id_photo' => 'nullable|required_if:role,seller|image|mimes:jpg,jpeg,png|max:2048',
-            'city_id' => 'nullable|exists:cities,id',
+            'governorate_id' => 'nullable|exists:governorates,id',
         ];
     }
 

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('units', function (Blueprint $table) {
-            $table->timestamp('rented_at')->nullable()->after('sold_at');
+            $table->timestamp('reserved_at')->nullable()->after('sold_at');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('units', function (Blueprint $table) {
-            $table->dropColumn('rented_at');
+            $table->dropColumn('reserved_at');
         });
     }
 };

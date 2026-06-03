@@ -492,8 +492,8 @@ class MultimediaImportAction extends Action
                         if ($columnName === 'compound') {
                             $names = \App\Models\Compound::pluck('name_ar')->toArray();
                             $commentText = !empty($names) ? "القيم المتاحة:\n- " . implode("\n- ", $names) : "لا توجد مجمعات سكنية مسجلة.";
-                        } elseif ($columnName === 'city') {
-                            $names = \App\Models\City::pluck('name_ar')->toArray();
+                        } elseif ($columnName === 'governorate') {
+                            $names = \App\Models\Governorate::pluck('name_ar')->toArray();
                             $commentText = !empty($names) ? "القيم المتاحة:\n- " . implode("\n- ", $names) : "لا توجد مدن مسجلة.";
                         } elseif ($columnName === 'type') {
                             $names = \App\Models\UnitType::pluck('name_ar')->toArray();
@@ -529,9 +529,9 @@ class MultimediaImportAction extends Action
                     $exampleRows = [];
                     foreach ($columns as $column) {
                         $examples = $column->getExamples();
-                        // Assume single example row for simplicity or take max usually
+                        // Assume single example row for simpligovernorate or take max usually
                         // The original code handled multiple rows.
-                        // For simplicity in template, 1 row is usually enough.
+                        // For simpligovernorate in template, 1 row is usually enough.
                         $exampleRows[] = $examples[0] ?? '';
                     }
 

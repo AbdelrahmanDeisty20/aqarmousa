@@ -29,7 +29,7 @@ class TransactionService
 
     public function getUserTransactions($user)
     {
-        return Transaction::with(['unit.type', 'unit.city', 'unit.compound', 'unit.developer', 'unit.media'])
+        return Transaction::with(['unit.type', 'unit.governorate', 'unit.compound', 'unit.developer', 'unit.media'])
             ->where('user_id', $user->id)
             ->latest()
             ->paginate(10);

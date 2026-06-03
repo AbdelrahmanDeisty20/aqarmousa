@@ -14,8 +14,8 @@ class StatsController extends Controller
     {
         $stats = [
             [
-                'label' => app()->getLocale() === 'ar' ? 'مدن نغطيها' : 'Cities Covered',
-                'value' => \App\Models\City::count() . '+',
+                'label' => app()->getLocale() === 'ar' ? 'مدن نغطيها' : 'Governorates Covered',
+                'value' => \App\Models\Governorate::count() . '+',
                 'icon' => 'location-icon',
             ],
             [

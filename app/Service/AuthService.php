@@ -33,7 +33,7 @@ class AuthService
             'status' => $status,
             'avatar' => $avatarPath,
             'id_photo' => $idPhotoPath,
-            'city_id' => $data['city_id'] ?? null,
+            'governorate_id' => $data['governorate_id'] ?? null,
         ]);
 
         $user->sendEmailVerificationNotification();

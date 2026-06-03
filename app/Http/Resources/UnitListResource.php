@@ -28,15 +28,17 @@ class UnitListResource extends JsonResource
             }),
             "address" => ($lang === "ar" ? $this->address_ar : $this->address_en) ?? "",
             "price" => $this->price ?? 0,
+            "discount" => $this->discount ?? 0,
             "status" => $this->status ?? "",
             "offer_type" => $this->offer_type ?? "",
             "area" => $this->area ?? 0,
+            "length" => $this->length ?? 0,
+            "width" => $this->width ?? 0,
+            "category" => $this->category ?? 'land',
             "rooms" => $this->rooms ?? 0,
             "bathrooms" => $this->bathrooms ?? 0,
-            "city" => [
-                "id" => $this->city_id,
-                "name" => ($lang === "ar" ? ($this->city->name_ar ?? "") : ($this->city->name_en ?? "")),
-            ],
+            "garages" => $this->garages ?? 0,
+            "governorate" => new GovernorateResource($this->governorate),
             "compound" => $this->whenLoaded("compound", function () use ($lang) {
                 return [
                     "id" => $this->compound_id,

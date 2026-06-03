@@ -35,7 +35,7 @@ class RoleSeeder extends Seeder
                 'ViewAny:Developer', 'View:Developer', 'Update:Developer',
                 'ViewAny:Viewing', 'View:Viewing', 'Update:Viewing',
                 'ViewAny:Contact', 'View:Contact', 'Update:Contact',
-                'ViewAny:City', 'View:City',
+                'ViewAny:Governorate', 'View:Governorate',
             ],
             'financial_viewer' => [
                 'ViewAny:Transaction', 'View:Transaction',

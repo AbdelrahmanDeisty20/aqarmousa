@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Resources\CityResource;
+use App\Http\Resources\GovernorateResource;
 use App\Http\Resources\CompoundResource;
 use App\Http\Resources\UnitResource;
 use App\Http\Resources\UnitTypeResource;
@@ -35,8 +35,8 @@ class SearchController extends Controller
         if ($results['units']->isNotEmpty()) {
             $data['units'] = UnitListResource::collection($results['units']);
         }
-        if ($results['cities']->isNotEmpty()) {
-            $data['cities'] = $results['cities']->map(fn($c) => [
+        if ($results['governorates']->isNotEmpty()) {
+            $data['governorates'] = $results['governorates']->map(fn($c) => [
                 'id' => $c->id,
                 'name' => $c->{"name_" . app()->getLocale()} ?: $c->name_ar ?: $c->name_en,
             ]);

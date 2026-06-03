@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Api;
 
-use App\Models\City;
+use App\Models\Governorate;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -32,7 +32,7 @@ class RegistrationTest extends TestCase
     public function test_seller_registration_success_with_id_photo()
     {
         Storage::fake('public');
-        $city = City::create(['name_ar' => 'القاهرة', 'name_en' => 'Cairo']);
+        $governorate = Governorate::create(['name_ar' => 'القاهرة', 'name_en' => 'Cairo']);
 
         $response = $this->postJson('/api/register', [
             'name' => 'Test Seller',
@@ -43,17 +43,17 @@ class RegistrationTest extends TestCase
             'role' => 'seller',
             'address' => 'Test Address',
             'id_photo' => UploadedFile::fake()->image('id.jpg'),
-            'city_id' => $city->id,
+            'governorate_id' => $governorate->id,
         ]);
 
-        $response->assertStatus(200)
-            ->assertJsonStructure(['access_token', 'user']);
+        $response->assertStatus(201)
+            ->assertJsonStructure(['data' => ['requires_verification', 'user']]);
 
         $this->assertDatabaseHas('users', [
             'email' => 'seller@example.com',
             'role' => 'seller',
             'status' => 'pending',
-            'city_id' => $city->id,
+            'governorate_id' => $governorate->id,
         ]);
 
         $user = User::where('email', 'seller@example.com')->first();
@@ -61,9 +61,9 @@ class RegistrationTest extends TestCase
         Storage::disk('public')->assertExists($user->id_photo);
     }
 
-    public function test_buyer_registration_success_with_city()
+    public function test_buyer_registration_success_with_governorate()
     {
-        $city = City::create(['name_ar' => 'القاهرة', 'name_en' => 'Cairo']);
+        $governorate = Governorate::create(['name_ar' => 'القاهرة', 'name_en' => 'Cairo']);
 
         $response = $this->postJson('/api/register', [
             'name' => 'Test Buyer',
@@ -72,16 +72,16 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'Password123',
             'phone' => '01112345678',
             'role' => 'buyer',
-            'city_id' => $city->id,
+            'governorate_id' => $governorate->id,
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $this->assertDatabaseHas('users', [
             'email' => 'buyer@example.com',
             'role' => 'buyer',
             'status' => 'approved',
-            'city_id' => $city->id,
+            'governorate_id' => $governorate->id,
         ]);
     }
 }

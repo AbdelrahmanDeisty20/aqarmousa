@@ -13,7 +13,7 @@ class DeveloperService
 
     public function getDeveloperById($id)
     {
-        return Developer::where('status', 'active')->with(['units', 'units.media', 'units.type', 'units.city', 'units.compound'])->find($id);
+        return Developer::where('status', 'active')->with(['units', 'units.media', 'units.type', 'units.governorate', 'units.compound'])->find($id);
     }
 
     public function getDeveloperUnits($id, $perPage = 10)
@@ -22,7 +22,7 @@ class DeveloperService
         if (!$developer) return null;
 
         return $developer->units()
-            ->with(['media', 'type', 'city', 'compound'])
+            ->with(['media', 'type', 'governorate', 'compound'])
             ->latest()
             ->paginate($perPage);
     }

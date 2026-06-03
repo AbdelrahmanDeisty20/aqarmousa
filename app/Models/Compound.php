@@ -10,11 +10,11 @@ class Compound extends Model
     //
     use HasFactory;
 
-    protected $fillable = ['name_ar', 'name_en', 'description_ar', 'description_en', 'city_id'];
+    protected $fillable = ['name_ar', 'name_en', 'description_ar', 'description_en', 'governorate_id'];
 
-    public function city()
+    public function governorate()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(Governorate::class);
     }
 
     public function units()

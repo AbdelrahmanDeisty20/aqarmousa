@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\GovernorateController;
 use App\Http\Controllers\Api\CompoundController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\SearchController;
@@ -57,7 +57,7 @@ Route::get('/stats', [App\Http\Controllers\Api\StatsController::class, 'index'])
 
 Route::get('/search', [SearchController::class, 'globalSearch']);
 
-// Listings (Units, Compounds, Cities)
+// Listings (Units, Compounds, Governorates)
 Route::get('/units', [UnitController::class, 'index']);
 Route::get('/units/latest', [UnitController::class, 'latest']);
 Route::get('/units/nearby', [UnitController::class, 'nearby'])->middleware('auth:sanctum');
@@ -67,7 +67,7 @@ Route::get('/units/{id}/reviews', [UnitController::class, 'reviews']);
 Route::get('/compounds', [CompoundController::class, 'index']);
 Route::get('/compounds/{id}', [CompoundController::class, 'show']);
 
-Route::get('/cities', [CityController::class, 'index']);
+Route::get('/governorates', [GovernorateController::class, 'index']);
 
 // Developers
 Route::get('/developers', [App\Http\Controllers\Api\DeveloperController::class, 'index']);

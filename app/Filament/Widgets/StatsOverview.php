@@ -121,7 +121,7 @@ class StatsOverview extends StatsOverviewWidget
     protected function getWidgets(): array
     {
         return [
-            UnitsByCityChart::class,
+            UnitsByGovernorateChart::class,
             // TransactionsByMonthChart::class, // Commented out - payment system disabled
         ];
     }

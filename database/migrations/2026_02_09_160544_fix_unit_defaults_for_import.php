@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('units', function (Blueprint $table) {
-            // Change default status to 'approved'
-            $table->enum('status', ['pending', 'approved', 'rejected', 'sold', 'rented'])
-                ->default('approved')
+            // Change default status to 'available'
+            $table->enum('status', ['pending', 'available', 'rejected', 'sold', 'reserved'])
+                ->default('available')
                 ->change();
 
             // Change default is_visible to 0 (hidden)
@@ -30,7 +30,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('units', function (Blueprint $table) {
-            $table->enum('status', ['pending', 'approved', 'rejected', 'sold', 'rented'])
+            $table->enum('status', ['pending', 'available', 'rejected', 'sold', 'reserved'])
                 ->default('pending')
                 ->change();
 

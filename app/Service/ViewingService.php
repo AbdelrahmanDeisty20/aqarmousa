@@ -15,7 +15,7 @@ class ViewingService
     public function getUserViewings()
     {
         return Viewing::where('user_id', Auth::id())
-            ->with(['unit.media', 'unit.city', 'unit.type', 'unit.compound', 'unit.developer'])
+            ->with(['unit.media', 'unit.governorate', 'unit.type', 'unit.compound', 'unit.developer'])
             ->latest()
             ->get();
     }
@@ -37,7 +37,7 @@ class ViewingService
             'status' => 'pending',
         ]);
 
-        return $viewing->load(['unit.media', 'unit.city', 'unit.type', 'unit.compound', 'unit.developer']);
+        return $viewing->load(['unit.media', 'unit.governorate', 'unit.type', 'unit.compound', 'unit.developer']);
     }
 
     /**
@@ -148,7 +148,7 @@ class ViewingService
     public function getUserViewing(int $id): Viewing
     {
         return Viewing::where('user_id', Auth::id())
-            ->with(['unit.media', 'unit.city', 'unit.type', 'unit.compound', 'unit.developer'])
+            ->with(['unit.media', 'unit.governorate', 'unit.type', 'unit.compound', 'unit.developer'])
             ->findOrFail($id);
     }
 }

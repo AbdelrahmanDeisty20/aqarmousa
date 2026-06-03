@@ -18,7 +18,7 @@ class GenerateShieldPermissions extends Command
 
         // Define all resources and their permissions
         $resources = [
-            'Amenity', 'Banner', 'City', 'Compound', 'Contact', 'Developer',
+            'Amenity', 'Banner', 'Governorate', 'Compound', 'Contact', 'Developer',
             'Faq', 'Favorite', 'MaintenanceBooking', 'MaintenanceService',
             'Page', 'Review', 'Service', 'Testimonial', 'Transaction',
             'Unit', 'UnitMedia', 'UnitType', 'User', 'Viewing', 'Role'

@@ -32,10 +32,10 @@ class CompoundForm
                             ]),
                         \Filament\Schemas\Components\Tabs\Tab::make(__('admin.fields.location' ?? 'Location'))
                             ->schema([
-                                Select::make('city_id')
-                                    ->relationship('city', 'name_ar')
+                                Select::make('governorate_id')
+                                    ->relationship('governorate', 'name_ar')
                                     ->getOptionLabelFromRecordUsing(fn($record) => $record->{'name_' . app()->getLocale()} ?? $record->name_ar)
-                                    ->label(__('admin.resources.city'))
+                                    ->label(__('admin.resources.governorate'))
                                     ->searchable()
                                     ->preload()
                                     ->required(),

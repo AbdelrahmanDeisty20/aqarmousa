@@ -18,7 +18,7 @@ class ReviewService
     // Get all reviews by the current user
     public function getUserReviews(User $user)
     {
-        return Review::with(['unit.media', 'unit.city'])
+        return Review::with(['unit.media', 'unit.governorate'])
             ->where('user_id', $user->id)
             ->latest()
             ->paginate(10);

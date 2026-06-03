@@ -5,9 +5,9 @@ return [
     'register_success' => 'User registered successfully',
     'login_success' => 'Login successful',
     'logout_success' => 'Logged out successfully',
-    'unit_created' => 'Unit created and pending review.',
-    'unit_updated' => 'Unit updated and pending review.',
-    'unit_deleted' => 'Unit deleted successfully',
+    'unit_created' => 'Land created and pending review.',
+    'unit_updated' => 'Land updated and pending review.',
+    'unit_deleted' => 'Land deleted successfully',
     'media_uploaded' => 'Media uploaded successfully',
     'account_pending' => 'Your account is pending approval. You cannot perform this action yet.',
     'review_submitted' => 'Review submitted successfully',
@@ -37,8 +37,8 @@ return [
     'email_not_verified' => 'Your email address is not verified.',
     'no_units_yet' => 'No properties available at the moment',
     'no_compounds_yet' => 'No compounds available at the moment',
-    'no_cities_yet' => 'No cities available at the moment',
-    'no_unit_types_yet' => 'No property types available at the moment',
+    'no_governorates_yet' => 'No governorates available at the moment',
+    'no_land_types_yet' => 'No property types available at the moment',
     'no_faqs_yet' => 'No FAQs available at the moment',
     'no_services_yet' => 'No services available at the moment',
     'no_testimonials_yet' => 'No customer reviews available at the moment',
@@ -49,8 +49,8 @@ return [
         'greeting' => 'Hello :name,',
         'unit_sold_body' => 'Congratulations, your property ":title" has been sold successfully.',
         'unit_rented_body' => 'Congratulations, your property ":title" has been rented successfully.',
-        'new_unit_subject' => 'New property in your city!',
-        'new_unit_body' => 'A new property ":title" has been added in :city. This might be what you are looking for!',
+        'new_unit_subject' => 'New property in your governorate!',
+        'new_unit_body' => 'A new property ":title" has been added in :governorate. This might be what you are looking for!',
         'view_unit' => 'View Property',
         'thank_you' => 'Thank you for using our platform.',
     ],
@@ -59,8 +59,8 @@ return [
     'profile_deleted' => 'Account deleted successfully',
     'not_found' => 'The requested resource was not found',
     'current_password_incorrect' => 'The current password is incorrect',
-    'unit_already_sold' => 'This unit is already sold',
-    'unit_already_rented' => 'This unit is already rented',
+    'unit_already_sold' => 'This land is already sold',
+    'unit_already_rented' => 'This land is already rented',
     'search_query_required' => 'The search query is required',
     'no_messages_yet' => 'No messages found yet',
     'verification' => [
@@ -85,7 +85,7 @@ return [
     'viewing' => [
         'retrieved_successfully' => 'Viewings retrieved successfully',
         'created_successfully' => 'Your request is under review and will be responded to soon',
-        'already_requested' => 'You have already requested a viewing for this unit.',
+        'already_requested' => 'You have already requested a viewing for this land.',
         'cancelled' => 'Viewing cancelled',
         'accepted' => 'Viewing accepted',
         'updated_pending_approval' => 'Viewing updated, pending admin approval',
@@ -105,6 +105,6 @@ return [
 
     // Review Messages
     'review' => [
-        'already_reviewed' => 'You have already reviewed this unit. You can update your previous review instead.',
+        'already_reviewed' => 'You have already reviewed this land. You can update your previous review instead.',
     ],
 ];

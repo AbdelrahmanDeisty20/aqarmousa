@@ -6,7 +6,7 @@ return [
     'navigation_label' => 'Viewings',
     'columns' => [
         'user' => 'User',
-        'unit' => 'Unit',
+        'land' => 'Land',
         'client_name' => 'Client Name',
         'phone' => 'Phone Number',
         'date' => 'Date',
@@ -42,7 +42,7 @@ return [
     ],
     'fields' => [
         'user' => 'User',
-        'unit' => 'Unit',
+        'land' => 'Land',
         'client_name' => 'Client Name',
         'email' => 'Email',
         'phone' => 'Phone Number',
@@ -65,8 +65,8 @@ return [
         'until' => 'Until',
         'user' => 'User',
         'all_users' => 'All Users',
-        'unit' => 'Unit',
-        'all_units' => 'All Units',
+        'land' => 'Land',
+        'all_units' => 'All Lands',
     ],
     'search_placeholder' => 'Search',
 ];

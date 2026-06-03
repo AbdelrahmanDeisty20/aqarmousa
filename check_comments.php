@@ -3,7 +3,7 @@ require 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-$file = $argv[1] ?? 'units-template (15).xlsx';
+$file = $argv[1] ?? 'lands-template (15).xlsx';
 
 if (!file_exists($file)) {
     echo "File not found: $file\n";

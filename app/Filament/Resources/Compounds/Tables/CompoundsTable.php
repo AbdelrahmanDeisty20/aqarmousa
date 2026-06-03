@@ -16,8 +16,8 @@ class CompoundsTable
             ->columns([
                 TextColumn::make('name_ar')->searchable(['name_ar', 'name_en'])->label(__('admin.fields.name_ar'))->visible(fn () => app()->getLocale() === 'ar'),
                 TextColumn::make('name_en')->searchable(['name_ar', 'name_en'])->label(__('admin.fields.name_en'))->visible(fn () => app()->getLocale() === 'en'),
-                TextColumn::make('city.name_ar')->label(__('admin.resources.city'))->searchable(['name_ar', 'name_en'])->visible(fn () => app()->getLocale() === 'ar'),
-                TextColumn::make('city.name_en')->label(__('admin.resources.city'))->searchable(['name_ar', 'name_en'])->visible(fn () => app()->getLocale() === 'en'),
+                TextColumn::make('governorate.name_ar')->label(__('admin.resources.governorate'))->searchable(['name_ar', 'name_en'])->visible(fn () => app()->getLocale() === 'ar'),
+                TextColumn::make('governorate.name_en')->label(__('admin.resources.governorate'))->searchable(['name_ar', 'name_en'])->visible(fn () => app()->getLocale() === 'en'),
             ])
             ->filters([
                 //

@@ -61,34 +61,34 @@ class UnitImporter extends Importer
                 ->guess(['العنوان (عربي)', 'العنوان', 'title_ar'])
                 ->requiredMapping()
                 ->rules(['required', 'max:255'])
-                ->example('شقة فاخرة للبيع في المعادي'),
+                ->example('أرض مميزة للبيع في التجمع الخامس'),
             ImportColumn::make('title_en')
                 ->label('العنوان (إنجليزي) (اختياري)')
                 ->guess(['العنوان (إنجليزي) (اختياري)', 'العنوان (إنجليزي)', 'title_en'])
                 ->rules(['nullable', 'max:255'])
-                ->example('Luxury Apartment for Sale in Maadi'),
+                ->example('Prime Unit for Sale in Fifth Settlement'),
             ImportColumn::make('description_ar')
                 ->label('الوصف (عربي)')
                 ->guess(['الوصف (عربي)', 'الوصف', 'description_ar'])
                 ->requiredMapping()
                 ->rules(['required'])
-                ->example('شقة 3 غرف نوم وصالة كبيرة...'),
+                ->example('أرض فضاء صالحة للبناء...'),
             ImportColumn::make('description_en')
                 ->label('الوصف (إنجليزي) (اختياري)')
                 ->guess(['الوصف (إنجليزي) (اختياري)', 'الوصف (إنجليزي)', 'description_en'])
                 ->rules(['nullable'])
-                ->example('3 Bedroom apartment with large hall...'),
+                ->example('Vacant plot of unit suitable for building...'),
             ImportColumn::make('address_ar')
                 ->label('العنوان بالتفصيل (عربي)')
                 ->guess(['العنوان بالتفصيل (عربي)', 'العنوان بالتفصيل', 'العنوان بالكامل', 'address_ar', 'address'])
                 ->requiredMapping()
                 ->rules(['required', 'max:255'])
-                ->example('15 شارع النصر، المعادي'),
+                ->example('شارع التسعين، التجمع الخامس'),
             ImportColumn::make('address_en')
                 ->label('العنوان بالتفصيل (إنجليزي) (اختياري)')
                 ->guess(['العنوان بالتفصيل (إنجليزي) (اختياري)', 'العنوان بالتفصيل (إنجليزي)', 'address_en'])
                 ->rules(['nullable', 'max:255'])
-                ->example('15 El Nasr St, Maadi'),
+                ->example('El Teseen St, Fifth Settlement'),
             ImportColumn::make('price')
                 ->label('السعر')
                 ->guess(['السعر', 'سعر', 'price'])
@@ -96,6 +96,11 @@ class UnitImporter extends Importer
                 ->numeric()
                 ->rules(['required', 'numeric'])
                 ->example('5000000'),
+            ImportColumn::make('discount')
+                ->label('الخصم (اختياري)')
+                ->guess(['الخصم', 'discount'])
+                ->rules(['nullable', 'numeric'])
+                ->example('100000'),
             ImportColumn::make('price_per_m2')
                 ->label('سعر المتر (اختياري)')
                 ->guess(['سعر المتر (اختياري)', 'سعر المتر', 'price_per_m2'])
@@ -124,145 +129,83 @@ class UnitImporter extends Importer
                 ->requiredMapping()
                 ->numeric()
                 ->rules(['required', 'numeric'])
-                ->example('200'),
+                ->example('500'),
+            ImportColumn::make('length')
+                ->label('الطول (اختياري)')
+                ->guess(['الطول', 'length'])
+                ->rules(['nullable', 'numeric'])
+                ->example('25'),
+            ImportColumn::make('width')
+                ->label('العرض (اختياري)')
+                ->guess(['العرض', 'width'])
+                ->rules(['nullable', 'numeric'])
+                ->example('20'),
+            ImportColumn::make('category')
+                ->label('التصنيف (land/property)')
+                ->guess(['التصنيف', 'category'])
+                ->default('land')
+                ->rules(['required', 'in:land,property'])
+                ->example('land'),
             ImportColumn::make('rooms')
                 ->label('الغرف (اختياري)')
-                ->guess(['الغرف (اختياري)', 'الغرف', 'rooms'])
-                ->rules(['nullable', function ($attribute, $value, $fail) {
-                    $cleaned = is_string($value) ? preg_replace('/^[\s\p{Zs}\p{Zl}\p{Zp}\x{00a0}]+|[\s\p{Zs}\p{Zl}\p{Zp}\x{00a0}]+$/u', '', $value) : $value;
-                    if (blank($cleaned)) return;
-                    if (!is_numeric($cleaned)) {
-                        $fail('يجب أن يكون الحقل ' . $attribute . ' عددًا صحيحًا.');
-                    }
-                }])
+                ->guess(['الغرف', 'rooms'])
+                ->rules(['nullable', 'numeric'])
                 ->example('3'),
             ImportColumn::make('bathrooms')
                 ->label('الحمامات (اختياري)')
-                ->guess(['الحمامات (اختياري)', 'الحمامات', 'bathrooms'])
-                ->rules(['nullable', function ($attribute, $value, $fail) {
-                    $cleaned = is_string($value) ? preg_replace('/^[\s\p{Zs}\p{Zl}\p{Zp}\x{00a0}]+|[\s\p{Zs}\p{Zl}\p{Zp}\x{00a0}]+$/u', '', $value) : $value;
-                    if (blank($cleaned)) return;
-                    if (!is_numeric($cleaned)) {
-                        $fail('يجب أن يكون الحقل ' . $attribute . ' عددًا صحيحًا.');
-                    }
-                }])
+                ->guess(['الحمامات', 'bathrooms'])
+                ->rules(['nullable', 'numeric'])
                 ->example('2'),
             ImportColumn::make('garages')
                 ->label('الجراجات (اختياري)')
-                ->guess(['الجراجات (اختياري)', 'الجراجات', 'garages'])
-                ->rules(['nullable', function ($attribute, $value, $fail) {
-                    $cleaned = is_string($value) ? preg_replace('/^[\s\p{Zs}\p{Zl}\p{Zp}\x{00a0}]+|[\s\p{Zs}\p{Zl}\p{Zp}\x{00a0}]+$/u', '', $value) : $value;
-                    if (blank($cleaned)) return;
-                    if (!is_numeric($cleaned)) {
-                        $fail('يجب أن يكون الحقل ' . $attribute . ' عددًا صحيحًا.');
-                    }
-                }])
+                ->guess(['الجراجات', 'garages'])
+                ->rules(['nullable', 'numeric'])
                 ->example('1'),
             ImportColumn::make('build_year')
                 ->label('سنة البناء (اختياري)')
-                ->guess(['سنة البناء (اختياري)', 'سنة البناء', 'build_year'])
-                ->rules(['nullable'])
-                ->example('2023'),
+                ->guess(['سنة البناء', 'build_year'])
+                ->rules(['nullable', 'numeric'])
+                ->example('2024'),
             ImportColumn::make('land_area')
-                ->label('مساحة الأرض (اختياري)')
-                ->guess(['مساحة الأرض (اختياري)', 'مساحة الأرض', 'land_area'])
-                ->rules(['nullable', function ($attribute, $value, $fail) {
-                    $cleaned = is_string($value) ? preg_replace('/^[\s\p{Zs}\p{Zl}\p{Zp}\x{00a0}]+|[\s\p{Zs}\p{Zl}\p{Zp}\x{00a0}]+$/u', '', $value) : $value;
-                    if (blank($cleaned)) return;
-
-                    if (!is_numeric($cleaned)) {
-                        $fail('يجب أن يكون الحقل ' . $attribute . ' رقمًا. القيمة الحالية: ' . $value);
-                    }
-                }])
-                ->example('0'),
+                ->label('مساحة الأرض الملحقة (اختياري)')
+                ->guess(['مساحة الأرض الملحقة', 'land_area'])
+                ->rules(['nullable', 'numeric'])
+                ->example('100'),
             ImportColumn::make('internal_area')
                 ->label('المساحة الداخلية (اختياري)')
-                ->guess(['المساحة الداخلية (اختياري)', 'المساحة الداخلية', 'internal_area'])
-                ->rules(['nullable', function ($attribute, $value, $fail) {
-                    $cleaned = is_string($value) ? preg_replace('/^[\s\p{Zs}\p{Zl}\p{Zp}\x{00a0}]+|[\s\p{Zs}\p{Zl}\p{Zp}\x{00a0}]+$/u', '', $value) : $value;
-                    if (blank($cleaned)) return;
-
-                    if (!is_numeric($cleaned)) {
-                        $fail('يجب أن يكون الحقل ' . $attribute . ' رقمًا. القيمة الحالية: ' . $value);
-                    }
-                }])
-                ->example('180'),
-            /*
-            ImportColumn::make('is_visible')
-                ->label('مرئي للجمهور')
-                ->guess(['مرئي للجمهور (1 أو 0)', 'مرئي للجمهور', 'is_visible'])
-                ->requiredMapping()
-                ->castStateUsing(function (string $state): int {
-                    $state = trim($state);
-                    return match ($state) {
-                        'نعم', 'مرئي', '1' => 1,
-                        'لا', 'مخفي', '0' => 0,
-                        default => (int) $state,
-                    };
-                })
-                ->boolean()
-                ->rules(['required', 'boolean'])
-                ->example('0'),
-*/
+                ->guess(['المساحة الداخلية', 'internal_area'])
+                ->rules(['nullable', 'numeric'])
+                ->example('150'),
             ImportColumn::make('development_status')
-                ->label('حالة التطوير')
-                ->guess(['حالة التطوير (primary/resale) (اختياري)', 'حالة التطوير', 'development_status'])
-                ->castStateUsing(function (?string $state): ?string {
-                    if (blank($state)) return null;
+                ->label('حالة التطوير (اختياري)')
+                ->guess(['حالة التطوير', 'development_status'])
+                ->rules(['nullable'])
+                ->example('ready'),
 
-                    $normalized = static::normalizeArabic($state);
-                    $normalized = strtolower($normalized);
-
-                    return match ($normalized) {
-                        'اولي', 'جديد', 'اول', 'primary' => 'primary',
-                        'اعاده بيع', 'resale' => 'resale',
-                        default => (strtolower($state) === 'primary' || strtolower($state) === 'resale') ? strtolower($state) : $state,
-                    };
-                })
-                ->rules(['nullable', 'max:255', 'in:primary,resale'])
-                ->example('أولي'),
-            /*
-            ImportColumn::make('status')
-                ->label('الحالة')
-                ->guess(['الحالة (approved/pending) (اختياري)', 'الحالة', 'status'])
-                ->castStateUsing(function (?string $state): ?string {
-                    if (blank($state)) return null;
-                    $state = trim($state);
-                    return match ($state) {
-                        'مقبول', 'موافقة', 'تم الموافقة', 'approved' => 'approved',
-                        // 'قيد الانتظار', 'انتظار', 'pending' => 'pending',
-                        // 'مرفوض', 'rejected' => 'rejected',
-                        default => $state,
-                    };
-                })
-                ->rules(['nullable', 'in:approved,pending'])
-                ->example('مقبول'),
-*/
-
-            // البحث عن المدينة باسمها العربي
-            ImportColumn::make('city')
-                ->label('المدينة')
-                ->guess(['المدينة', 'مدينة', 'city'])
+            // البحث عن المحافظة باسمها العربي
+            ImportColumn::make('governorate')
+                ->label('المحافظة')
+                ->guess(['المحافظة', 'محافظة', 'governorate'])
                 ->relationship(resolveUsing: 'name_ar')
                 ->requiredMapping()
                 ->rules(['required'])
                 ->example('القاهرة'),
 
-            // البحث عن نوع الوحدة باسمها العربي
+            // البحث عن نوع الأرض باسمها العربي
             ImportColumn::make('type')
-                ->label('نوع العقار')
-                ->guess(['نوع العقار', 'النوع', 'type'])
+                ->label('نوع الأرض')
+                ->guess(['نوع الأرض', 'نوع العقار', 'النوع', 'type'])
                 ->relationship(resolveUsing: 'name_ar')
                 ->requiredMapping()
                 ->rules(['required'])
-                ->example('شقة'),
+                ->example('سكنية'),
 
             // البحث عن المجمع السكني (الكمبوند) باسمه
             ImportColumn::make('compound')
                 ->label('الكمبوند (اختياري)')
                 ->guess(['الكمبوند (اختياري)', 'الكمبوند', 'المجمع السكني', 'compound'])
                 ->relationship(resolveUsing: 'name_ar')
-                ->example('بالم هيلز الإسكندرية'),
+                ->example('بالم هيلز'),
 
             // البحث عن المطور العقاري باسمه
             ImportColumn::make('developer')
@@ -324,46 +267,24 @@ class UnitImporter extends Importer
         ]);
 
         // Force set default values in the data array before filling the model
-        $this->data['status'] = 'approved';
+        $this->data['status'] = 'available';
         $this->data['is_visible'] = false;
-
-        // If offer_type is rent, development_status MUST be empty
-        if (static::isRent($this->data['offer_type'] ?? '')) {
-            Log::info('UnitImporter beforeFill - Detected RENT, clearing development_status');
-            $this->data['development_status'] = null;
-        }
-
-        Log::info('UnitImporter beforeFill - After setting defaults', [
-            'status' => $this->data['status'] ?? null,
-            'is_visible' => $this->data['is_visible'] ?? null,
-            'development_status' => $this->data['development_status'] ?? 'NOT_CLEARED',
-        ]);
     }
 
     protected function beforeSave(): void
     {
         Log::info('UnitImporter beforeSave - Trace', [
             'offer_type' => $this->record->offer_type,
-            'development_status' => $this->record->development_status,
-            'is_rent' => static::isRent($this->record->offer_type),
         ]);
 
         // Force set these values to ensure they are correct
         $this->record->is_visible = false;
-        $this->record->status = 'approved';
-
-        // FORCE clear development_status if offer_type is rent
-        if (static::isRent($this->record->offer_type)) {
-            Log::info('UnitImporter beforeSave - FORCE clearing development_status for RENT');
-            $this->record->development_status = null;
-            $this->record->setAttribute('development_status', null);
-        }
+        $this->record->status = 'available';
 
         Log::info('UnitImporter beforeSave - Final record state', [
             'status' => $this->record->status,
             'is_visible' => $this->record->is_visible,
             'offer_type' => $this->record->offer_type,
-            'development_status' => $this->record->development_status,
         ]);
     }
 
@@ -397,9 +318,6 @@ class UnitImporter extends Importer
                     if (str_starts_with($mediaItem, 'video:')) {
                         $type = 'video';
                         $filename = substr($mediaItem, 6);
-                    } elseif (str_starts_with($mediaItem, '3d:')) {
-                        $type = '3d';
-                        $filename = substr($mediaItem, 3);
                     } elseif (str_starts_with($mediaItem, 'floorplan:')) {
                         $type = 'floorplan';
                         $filename = substr($mediaItem, 10);
@@ -413,10 +331,6 @@ class UnitImporter extends Importer
                         // We use a unique name to avoid conflicts
                         $newFilename = uniqid('unit_' . $unit->id . '_') . '_' . $filename;
                         $destinationPath = 'units/media/' . $newFilename;
-
-                        // Storage::disk('public')->put() requires content, but copy is better.
-                        // But source is absolute path, destination is relative to disk.
-                        // We can use php copy() to the disk's full path.
 
                         $disk = \Illuminate\Support\Facades\Storage::disk('public');
                         $fullDestPath = $disk->path($destinationPath);

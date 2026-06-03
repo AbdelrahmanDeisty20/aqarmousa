@@ -58,6 +58,7 @@ Route::get('/stats', [App\Http\Controllers\Api\StatsController::class, 'index'])
 Route::get('/search', [SearchController::class, 'globalSearch']);
 
 // Listings (Units, Compounds, Governorates)
+Route::get('/governorates', [App\Http\Controllers\Api\GovernorateController::class, 'index']);
 Route::get('/units', [UnitController::class, 'index']);
 Route::get('/units/latest', [UnitController::class, 'latest']);
 Route::get('/units/nearby', [UnitController::class, 'nearby'])->middleware('auth:sanctum');

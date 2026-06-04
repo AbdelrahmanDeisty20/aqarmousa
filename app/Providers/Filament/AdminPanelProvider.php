@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName(fn() => Setting::getValue('site_name', 'Real Estate'))
             ->brandLogo(asset('images/logo.png'))
-            ->brandLogoHeight('7rem')
+            ->brandLogoHeight('2.5rem')
             ->colors([
                 'primary' => [
                     50 => '#f1f5f9',

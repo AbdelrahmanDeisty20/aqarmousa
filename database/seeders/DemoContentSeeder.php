@@ -234,7 +234,7 @@ class DemoContentSeeder extends Seeder
                 $buildYear = null;
                 $internalArea = null;
                 $landArea = null;
-                $devStatus = null;
+                $devStatus = ['مكتمل المرافق', 'تحت التطوير', 'جاهز للبناء'][rand(0, 2)];
 
                 $unit = Unit::create([
                     'title_en' => $type->name_en . ' for ' . $selectedOfferType . ' in ' . $governorate->name_en,

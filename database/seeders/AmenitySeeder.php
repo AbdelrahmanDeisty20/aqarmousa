@@ -15,6 +15,11 @@ class AmenitySeeder extends Seeder
      */
     public function run(): void
     {
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        DB::table('amenity_unit')->truncate();
+        \App\Models\Amenity::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+
         $targetDir = 'amenities';
         $amenities = [
             ['name_en' => 'Water Network', 'name_ar' => 'شبكة مياه', 'icon_file' => 'pool.jpg'],

@@ -21,8 +21,6 @@ class UnitResource extends JsonResource
             'price_per_m2' => $this->price_per_m2 ?? 0,
             'offer_type' => $this->offer_type ?? '',
             'area' => $this->area ?? 0,
-            'unit_area' => $this->unit_area ?? 0,
-            'internal_area' => $this->internal_area ?? 0,
             'build_year' => $this->build_year ?? '',
             'latitude' => $this->latitude ?? '',
             'longitude' => $this->longitude ?? '',
@@ -42,7 +40,7 @@ class UnitResource extends JsonResource
                     ->exists();
             }),
             'is_visible' => (bool) $this->is_visible,
-            'development_status' => $this->offer_type === 'rent' ? '' : ($this->development_status ?? ''),
+            'development_status' => $this->development_status ?? '',
             'owner' => new UserResource($this->whenLoaded('owner')), // Relations usually handled by 'data' wrapper or null if not loaded, but if loaded and null, Resource handles it? No, if relation is null, new Resource(null) might return null resource.
             // However, relation logic with `new Resource` on null often returns null.
             // If flutter expects object, returning null is okay ONLY if they made it nullable.

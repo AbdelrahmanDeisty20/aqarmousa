@@ -20,12 +20,12 @@ class PageResource extends JsonResource
             'team_members' => collect($this->team_members)->map(fn($member) => [
                 'name' => $member['name'] ?? '',
                 'position' => $member['position'] ?? '',
-                'photo' => isset($member['photo']) ? env('APP_URL') . Storage::disk('public')->url($member['photo']) : '',
+                'photo' => isset($member['photo']) ? Storage::disk('public')->url($member['photo']) : '',
             ]),
             'features' => collect($this->features)->map(fn($feature) => [
                 'title' => $lang === 'ar' ? ($feature['title_ar'] ?? '') : ($feature['title_en'] ?? ($feature['title_ar'] ?? '')),
                 'description' => $lang === 'ar' ? ($feature['description_ar'] ?? '') : ($feature['description_en'] ?? ($feature['description_ar'] ?? '')),
-                'icon' => isset($feature['icon']) ? env('APP_URL') . Storage::disk('public')->url($feature['icon']) : '',
+                'icon' => isset($feature['icon']) ? Storage::disk('public')->url($feature['icon']) : '',
             ]),
             'sections' => collect($this->sections)->map(fn($section) => [
                 'title' => $lang === 'ar' ? ($section['title_ar'] ?? '') : ($section['title_en'] ?? ''),

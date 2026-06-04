@@ -14,7 +14,7 @@ class DeveloperResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => ($lang === 'ar' ? $this->name_ar : $this->name_en) ?? '',
-            'logo' => $this->logo ? env('APP_URL') . Storage::disk('public')->url($this->logo) : '',
+            'logo' => $this->logo ? Storage::disk('public')->url($this->logo) : '',
             'email' => $this->email ?? '',
             'phone' => $this->phone ?? '',
             'address' => $this->address ?? '',

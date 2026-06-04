@@ -12,8 +12,8 @@ class UnitMediaResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'file_path' => $this->url ? env('APP_URL') . Storage::disk('public')->url($this->url) : '',
-            'hls_path' => $this->processed_url ? env('APP_URL') . Storage::disk('public')->url($this->processed_url) : '',
+            'file_path' => $this->url ? Storage::disk('public')->url($this->url) : '',
+            'hls_path' => $this->processed_url ? Storage::disk('public')->url($this->processed_url) : '',
             'processing_status' => $this->processing_status ?? 'pending',
             'type' => $this->type ?? 'image',
         ];

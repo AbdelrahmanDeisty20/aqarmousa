@@ -21,7 +21,7 @@ class TestimonialResource extends JsonResource
             'name' => $this->name,
             'position' => $this->position ?? 'Client',
             'content' => $this->content,
-            'image' => $this->image ? env('APP_URL') . Storage::disk('public')->url($this->image) : '',
+            'image' => $this->image ? Storage::disk('public')->url($this->image) : '',
             'status' => (bool) $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

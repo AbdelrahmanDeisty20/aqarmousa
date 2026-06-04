@@ -42,7 +42,7 @@ class UnitListResource extends JsonResource
             ],
             "main_image" => $this->whenLoaded("media", function () {
                 $image = $this->media->where("type", "image")->first();
-                return $image ? env('APP_URL') . Storage::disk("public")->url($image->url) : "";
+                return $image ? Storage::disk("public")->url($image->url) : "";
             }),
             "average_rating" => (float) ($this->reviews_avg_rating ?? 0),
             "reviews_count" => (int) ($this->reviews_count ?? 0),

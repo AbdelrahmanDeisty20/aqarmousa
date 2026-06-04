@@ -17,7 +17,7 @@ class BannerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'image' => $this->image ? env('APP_URL') . Storage::disk('public')->url($this->image) : '',
+            'image' => $this->image ? Storage::disk('public')->url($this->image) : '',
             'url' => $this->url,
             'sort_order' => $this->sort_order,
         ];

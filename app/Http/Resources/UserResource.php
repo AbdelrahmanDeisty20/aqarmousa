@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'address' => $this->address ?? '',
-            'avatar' => $this->avatar ? env('APP_URL') . Storage::disk('public')->url($this->avatar) : '',
+            'avatar' => $this->avatar ? Storage::disk('public')->url($this->avatar) : '',
             'governorate' => new GovernorateResource($this->governorate) ?? '',
             'status' => $this->status,
             'role' => $this->role,

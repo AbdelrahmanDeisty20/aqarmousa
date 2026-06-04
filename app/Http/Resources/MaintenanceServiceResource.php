@@ -20,7 +20,7 @@ class MaintenanceServiceResource extends JsonResource
             'id' => $this->id,
             'title' => $lang === 'ar' ? $this->title_ar : ($this->title_en ?? $this->title_ar),
             'category' => $this->category,
-            'image' => $this->image ? env('APP_URL') . Storage::disk('public')->url($this->image) : '',
+            'image' => $this->image ? Storage::disk('public')->url($this->image) : '',
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }

@@ -2,25 +2,25 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\VerifyCsrfToken;
+use App\Models\Setting;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
-use Filament\Panel;
-use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
+use Filament\Panel;
+use Filament\PanelProvider;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Models\Setting;
-use Filament\Navigation\NavigationItem;
-use Filament\Navigation\MenuItem;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName(fn() => Setting::getValue('site_name', 'Real Estate'))
             ->brandLogo(asset('images/logo.png'))
-            ->brandLogoHeight('7rem')
+            ->brandLogoHeight('2.5rem')
             ->colors([
                 'primary' => [
                     50 => '#f1f5f9',
@@ -41,7 +41,7 @@ class AdminPanelProvider extends PanelProvider
                     200 => '#cbd5e1',
                     300 => '#94a3b8',
                     400 => '#64748b',
-                    500 => '#334e68', // Primary brand color (Navy)
+                    500 => '#334e68',  // Primary brand color (Navy)
                     600 => '#1e293b',
                     700 => '#0f172a',
                     800 => '#020617',
@@ -53,7 +53,7 @@ class AdminPanelProvider extends PanelProvider
                     200 => '#99f6e4',
                     300 => '#5eead4',
                     400 => '#2dd4bf',
-                    500 => '#299ea3', // Teal from logo
+                    500 => '#299ea3',  // Teal from logo
                     600 => '#0d9488',
                     700 => '#0f766e',
                     800 => '#115e59',
@@ -100,7 +100,7 @@ class AdminPanelProvider extends PanelProvider
             ->navigationItems([
                 NavigationItem::make()
                     ->label(fn() => __('admin.view_website'))
-                    ->url(fn (): string => config('app.frontend_url', '#'))
+                    ->url(fn(): string => config('app.frontend_url', '#'))
                     ->icon('heroicon-o-globe-alt')
                     ->group(fn() => __('admin.quick_links'))
                     ->sort(-1),
@@ -108,7 +108,7 @@ class AdminPanelProvider extends PanelProvider
             ->userMenuItems([
                 'view_website' => MenuItem::make()
                     ->label(fn() => __('admin.view_website'))
-                    ->url(fn (): string => config('app.frontend_url', '#'))
+                    ->url(fn(): string => config('app.frontend_url', '#'))
                     ->icon('heroicon-o-globe-alt'),
             ]);
     }

@@ -264,10 +264,13 @@ class UnitForm
                                 ->label('ابحث عن موقع')
                                 ->placeholder('اكتب اسم المكان... مثال: المنصورة، الدقهلية')
                                 ->suffixAction(
-                                    \Filament\Actions\Action::make('search_location')
+                                    \Filament\Forms\Components\Actions\Action::make('search_location')
                                         ->icon('heroicon-o-magnifying-glass')
                                         ->label('بحث')
-                                        ->action(function ($get, $set) {
+                                        ->action(function (
+                                            \Filament\Schemas\Components\Utilities\Get $get,
+                                            \Filament\Schemas\Components\Utilities\Set $set
+                                        ) {
                                             $query = $get('location_search');
                                             if (!$query) return;
 
@@ -298,6 +301,7 @@ class UnitForm
                                 )
                                 ->columnSpanFull()
                                 ->dehydrated(false),
+
 
                             \Dotswan\MapPicker\Fields\Map::make('location')
                                 ->label(__('admin.fields.location'))

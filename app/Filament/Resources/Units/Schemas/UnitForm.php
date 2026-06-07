@@ -292,6 +292,9 @@ class UnitForm
                                                 $set('longitude', $lng);
                                                 $set('location', ['lat' => $lat, 'lng' => $lng]);
 
+                                                // Update addresses from the search coordinates
+                                                self::updateAddressesFromCoordinates($lat, $lng, $set);
+
                                                 // Dispatch the event to tell Leaflet map to pan/zoom to the new coordinates
                                                 $livewire->dispatch('refreshMap');
                                             } else {
@@ -325,8 +328,13 @@ class UnitForm
                                     }
                                 })
                                 ->afterStateUpdated(function ($state, $set): void {
-                                    $set('latitude', $state['lat'] ?? null);
-                                    $set('longitude', $state['lng'] ?? null);
+                                    $lat = $state['lat'] ?? null;
+                                    $lng = $state['lng'] ?? null;
+                                    $set('latitude', $lat);
+                                    $set('longitude', $lng);
+
+                                    // Update addresses when user clicks/drags map pin
+                                    self::updateAddressesFromCoordinates($lat, $lng, $set);
                                 }),
 
                             \Filament\Schemas\Components\Grid::make(2)

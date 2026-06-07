@@ -316,7 +316,6 @@ class UnitForm
                                 ->zoom(12)
                                 ->showFullscreenControl()
                                 ->showZoomControl()
-                                ->liveLocation(true, true, 5000)
                                 ->afterStateHydrated(function ($state, $set, $record): void {
                                     if ($record && $record->latitude && $record->longitude) {
                                         $set('location', [

@@ -260,22 +260,41 @@ class UnitForm
 
                     \Filament\Schemas\Components\Tabs\Tab::make(__('admin.fields.location' ?? 'Location'))
                         ->schema([
+                            \Dotswan\MapPicker\Fields\Map::make('location')
+                                ->label(__('admin.fields.location'))
+                                ->columnSpanFull()
+                                ->defaultLocation(latitude: 30.0444, longitude: 31.2357) // القاهرة
+                                ->draggable()
+                                ->clickable()
+                                ->zoom(12)
+                                ->showFullscreenControl()
+                                ->showZoomControl()
+                                ->liveLocation(true, true, 5000)
+                                ->afterStateHydrated(function ($state, $set, $record): void {
+                                    if ($record && $record->latitude && $record->longitude) {
+                                        $set('location', [
+                                            'lat' => $record->latitude,
+                                            'lng' => $record->longitude,
+                                        ]);
+                                    }
+                                })
+                                ->afterStateUpdated(function ($state, $set): void {
+                                    $set('latitude', $state['lat'] ?? null);
+                                    $set('longitude', $state['lng'] ?? null);
+                                }),
+
                             \Filament\Schemas\Components\Grid::make(2)
                                 ->schema([
                                     TextInput::make('latitude')
                                         ->label(__('admin.fields.latitude'))
                                         ->numeric()
-                                        ->minValue(-90)
-                                        ->maxValue(90)
-                                        ->helperText('الرقم الأول في خرائط جوجل (قبل الفاصلة)')
+                                        ->readOnly()
                                         ->nullable(),
 
                                     TextInput::make('longitude')
                                         ->label(__('admin.fields.longitude'))
                                         ->numeric()
-                                        ->minValue(-180)
-                                        ->maxValue(180)
-                                        ->helperText('الرقم الثاني في خرائط جوجل (بعد الفاصلة)')
+                                        ->readOnly()
                                         ->nullable(),
 
                                     TextInput::make('address_ar')

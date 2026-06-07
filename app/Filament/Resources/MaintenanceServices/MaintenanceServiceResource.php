@@ -18,6 +18,8 @@ class MaintenanceServiceResource extends Resource
 {
     protected static ?string $model = MaintenanceService::class;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedWrenchScrewdriver;
     public static function getNavigationBadge(): ?string
     {

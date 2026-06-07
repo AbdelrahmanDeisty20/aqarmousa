@@ -18,6 +18,8 @@ class CompoundResource extends Resource
 {
     protected static ?string $model = Compound::class;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function getNavigationGroup(): ?string
     {
         return __('admin.navigation_groups.real_estate');

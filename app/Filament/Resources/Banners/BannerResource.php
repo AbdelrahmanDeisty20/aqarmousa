@@ -27,6 +27,8 @@ class BannerResource extends Resource
 {
     protected static ?string $model = Banner::class;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function getNavigationLabel(): string

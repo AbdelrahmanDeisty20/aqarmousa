@@ -264,14 +264,11 @@ class UnitForm
                                 ->label('ابحث عن موقع')
                                 ->placeholder('اكتب اسم المكان... مثال: المنصورة، الدقهلية')
                                 ->suffixAction(
-                                    \Filament\Forms\Components\Actions\Action::make('search_location')
+                                    \Filament\Actions\Action::make('search_location')
                                         ->icon('heroicon-o-magnifying-glass')
                                         ->label('بحث')
-                                        ->action(function (
-                                            \Filament\Schemas\Components\Utilities\Get $get,
-                                            \Filament\Schemas\Components\Utilities\Set $set
-                                        ) {
-                                            $query = $get('location_search');
+                                        ->action(function (array $arguments, $component, $livewire) {
+                                            $query = $livewire->data['location_search'] ?? null;
                                             if (!$query) return;
 
                                             $response = \Illuminate\Support\Facades\Http::withHeaders([
@@ -287,9 +284,9 @@ class UnitForm
                                             if (!empty($results)) {
                                                 $lat = (float) $results[0]['lat'];
                                                 $lng = (float) $results[0]['lon'];
-                                                $set('latitude', $lat);
-                                                $set('longitude', $lng);
-                                                $set('location', ['lat' => $lat, 'lng' => $lng]);
+                                                $livewire->data['latitude']  = $lat;
+                                                $livewire->data['longitude'] = $lng;
+                                                $livewire->data['location']  = ['lat' => $lat, 'lng' => $lng];
                                             } else {
                                                 \Filament\Notifications\Notification::make()
                                                     ->title('لم يتم العثور على الموقع')

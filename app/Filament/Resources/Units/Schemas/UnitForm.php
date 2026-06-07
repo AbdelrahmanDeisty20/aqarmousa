@@ -260,6 +260,45 @@ class UnitForm
 
                     \Filament\Schemas\Components\Tabs\Tab::make(__('admin.fields.location' ?? 'Location'))
                         ->schema([
+                            \Filament\Forms\Components\TextInput::make('location_search')
+                                ->label('ابحث عن موقع')
+                                ->placeholder('اكتب اسم المكان... مثال: المنصورة، الدقهلية')
+                                ->suffixAction(
+                                    \Filament\Actions\Action::make('search_location')
+                                        ->icon('heroicon-o-magnifying-glass')
+                                        ->label('بحث')
+                                        ->action(function ($get, $set) {
+                                            $query = $get('location_search');
+                                            if (!$query) return;
+
+                                            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                                                'User-Agent' => 'AqarMousa/1.0 (aqarmousa.com)',
+                                            ])->get('https://nominatim.openstreetmap.org/search', [
+                                                'q'      => $query,
+                                                'format' => 'json',
+                                                'limit'  => 1,
+                                            ]);
+
+                                            $results = $response->json();
+
+                                            if (!empty($results)) {
+                                                $lat = (float) $results[0]['lat'];
+                                                $lng = (float) $results[0]['lon'];
+                                                $set('latitude', $lat);
+                                                $set('longitude', $lng);
+                                                $set('location', ['lat' => $lat, 'lng' => $lng]);
+                                            } else {
+                                                \Filament\Notifications\Notification::make()
+                                                    ->title('لم يتم العثور على الموقع')
+                                                    ->body('حاول كتابة اسم أكثر تحديداً')
+                                                    ->warning()
+                                                    ->send();
+                                            }
+                                        })
+                                )
+                                ->columnSpanFull()
+                                ->dehydrated(false),
+
                             \Dotswan\MapPicker\Fields\Map::make('location')
                                 ->label(__('admin.fields.location'))
                                 ->columnSpanFull()

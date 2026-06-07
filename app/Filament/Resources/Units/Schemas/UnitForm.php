@@ -267,8 +267,12 @@ class UnitForm
                                     \Filament\Actions\Action::make('search_location')
                                         ->icon('heroicon-o-magnifying-glass')
                                         ->label('بحث')
-                                        ->action(function (array $arguments, $component, $livewire) {
-                                            $query = $livewire->data['location_search'] ?? null;
+                                        ->action(function (
+                                            \Filament\Schemas\Components\Utilities\Get $get,
+                                            \Filament\Schemas\Components\Utilities\Set $set,
+                                            \Livewire\Component $livewire
+                                        ) {
+                                            $query = $get('location_search');
                                             if (!$query) return;
 
                                             $response = \Illuminate\Support\Facades\Http::withHeaders([
@@ -284,9 +288,12 @@ class UnitForm
                                             if (!empty($results)) {
                                                 $lat = (float) $results[0]['lat'];
                                                 $lng = (float) $results[0]['lon'];
-                                                $livewire->data['latitude']  = $lat;
-                                                $livewire->data['longitude'] = $lng;
-                                                $livewire->data['location']  = ['lat' => $lat, 'lng' => $lng];
+                                                $set('latitude', $lat);
+                                                $set('longitude', $lng);
+                                                $set('location', ['lat' => $lat, 'lng' => $lng]);
+
+                                                // Dispatch the event to tell Leaflet map to pan/zoom to the new coordinates
+                                                $livewire->dispatch('refreshMap');
                                             } else {
                                                 \Filament\Notifications\Notification::make()
                                                     ->title('لم يتم العثور على الموقع')

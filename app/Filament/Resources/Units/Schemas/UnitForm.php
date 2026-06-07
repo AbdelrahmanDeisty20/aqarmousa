@@ -235,26 +235,12 @@ class UnitForm
                                         ->preload()
                                         ->required(),
 
-                                    Select::make('compound_id')
-                                        ->label(__('admin.resources.compound'))
-                                        ->relationship('compound', 'name_' . app()->getLocale())
-                                        ->searchable()
-                                        ->preload()
-                                        ->nullable(),
-
                                     Select::make('owner_id')
                                         ->label(__('admin.fields.user'))
                                         ->relationship('owner', 'name')
                                         ->searchable()
                                         ->preload()
                                         ->required(),
-
-                                    Select::make('developer_id')
-                                        ->label(__('admin.resources.developer'))
-                                        ->relationship('developer', 'name_' . app()->getLocale())
-                                        ->searchable()
-                                        ->preload()
-                                        ->nullable(),
                                 ]),
                         ]),
 

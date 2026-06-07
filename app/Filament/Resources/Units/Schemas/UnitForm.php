@@ -328,14 +328,34 @@ class UnitForm
                                     TextInput::make('latitude')
                                         ->label(__('admin.fields.latitude'))
                                         ->numeric()
-                                        ->readOnly()
-                                        ->nullable(),
+                                        ->nullable()
+                                        ->live(onBlur: true)
+                                        ->afterStateUpdated(function ($state, $get, $set, \Livewire\Component $livewire) {
+                                            $lat = $state;
+                                            $lng = $get('longitude');
+
+                                            if ($lat && $lng) {
+                                                $set('location', ['lat' => (float)$lat, 'lng' => (float)$lng]);
+                                                self::updateAddressesFromCoordinates($lat, $lng, $set);
+                                                $livewire->dispatch('refreshMap');
+                                            }
+                                        }),
 
                                     TextInput::make('longitude')
                                         ->label(__('admin.fields.longitude'))
                                         ->numeric()
-                                        ->readOnly()
-                                        ->nullable(),
+                                        ->nullable()
+                                        ->live(onBlur: true)
+                                        ->afterStateUpdated(function ($state, $get, $set, \Livewire\Component $livewire) {
+                                            $lat = $get('latitude');
+                                            $lng = $state;
+
+                                            if ($lat && $lng) {
+                                                $set('location', ['lat' => (float)$lat, 'lng' => (float)$lng]);
+                                                self::updateAddressesFromCoordinates($lat, $lng, $set);
+                                                $livewire->dispatch('refreshMap');
+                                            }
+                                        }),
 
                                     TextInput::make('address_ar')
                                         ->label(__('admin.fields.address_ar'))

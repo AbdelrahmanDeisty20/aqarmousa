@@ -20,6 +20,8 @@ class MaintenanceBookingResource extends Resource
 {
     protected static ?string $model = MaintenanceBooking::class;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
     public static function getNavigationBadge(): ?string
     {

@@ -411,4 +411,41 @@ class UnitForm
                 ->columnSpanFull(),
         ]);
     }
+
+    public static function updateAddressesFromCoordinates($lat, $lng, $set): void
+    {
+        if (!$lat || !$lng) return;
+
+        try {
+            // Fetch Arabic address
+            $responseAr = \Illuminate\Support\Facades\Http::withHeaders([
+                'User-Agent' => 'AqarMousa/1.0 (aqarmousa.com)',
+            ])->get('https://nominatim.openstreetmap.org/reverse', [
+                'lat'    => $lat,
+                'lon'    => $lng,
+                'format' => 'json',
+                'accept-language' => 'ar',
+            ]);
+
+            if ($responseAr->successful()) {
+                $set('address_ar', $responseAr->json()['display_name'] ?? null);
+            }
+
+            // Fetch English address
+            $responseEn = \Illuminate\Support\Facades\Http::withHeaders([
+                'User-Agent' => 'AqarMousa/1.0 (aqarmousa.com)',
+            ])->get('https://nominatim.openstreetmap.org/reverse', [
+                'lat'    => $lat,
+                'lon'    => $lng,
+                'format' => 'json',
+                'accept-language' => 'en',
+            ]);
+
+            if ($responseEn->successful()) {
+                $set('address_en', $responseEn->json()['display_name'] ?? null);
+            }
+        } catch (\Exception $e) {
+            // Quietly handle API timeout/errors
+        }
+    }
 }

@@ -265,7 +265,7 @@ class UnitForm
                                 ->columnSpanFull()
                                 ->defaultLocation(latitude: 30.0444, longitude: 31.2357) // القاهرة
                                 ->draggable()
-                                ->clickable()
+                                ->clickable(true)
                                 ->zoom(12)
                                 ->showFullscreenControl()
                                 ->showZoomControl()

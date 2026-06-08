@@ -28,5 +28,9 @@ class AppServiceProvider extends ServiceProvider
         ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
             return route('api.password.verify', ['token' => $token, 'email' => $notifiable->getEmailForPasswordReset()]);
         });
+
+        \Illuminate\Support\Facades\Gate::define('viewPulse', function ($user) {
+            return $user->hasRole('super_admin') || $user->email === 'admin@admin.com';
+        });
     }
 }

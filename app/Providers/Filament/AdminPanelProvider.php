@@ -104,6 +104,13 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-globe-alt')
                     ->group(fn() => __('admin.quick_links'))
                     ->sort(-1),
+                NavigationItem::make()
+                    ->label(fn() => app()->getLocale() === 'ar' ? 'أداء ومراقبة الموقع' : 'Site Performance')
+                    ->url('/pulse')
+                    ->openUrlInNewTab()
+                    ->icon('heroicon-o-cpu-chip')
+                    ->group(fn() => app()->getLocale() === 'ar' ? 'أدوات المراقبة' : 'Monitoring Tools')
+                    ->sort(10),
             ])
             ->userMenuItems([
                 'view_website' => MenuItem::make()

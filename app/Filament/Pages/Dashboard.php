@@ -12,7 +12,6 @@ class Dashboard extends BaseDashboard
             \App\Filament\Widgets\StatsOverview::class,
             \App\Filament\Widgets\LatestUnits::class,
             \App\Filament\Widgets\LatestContacts::class,
-            \App\Filament\Widgets\LatestViewings::class,
         ];
     }
 

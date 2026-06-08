@@ -73,10 +73,10 @@ class DemoContentSeeder extends Seeder
 
         // 2. Create Unit Types
         $typesData = [
-            ['en' => 'Residential Land', 'ar' => 'أرض سكنية', 'icon' => 'home', 'image_file' => 'villa.jpg'],
-            ['en' => 'Commercial Land', 'ar' => 'أرض تجارية', 'icon' => 'store', 'image_file' => 'shop.jpg'],
-            ['en' => 'Agricultural Land', 'ar' => 'أرض زراعية', 'icon' => 'nature', 'image_file' => 'chalet.jpg'],
-            ['en' => 'Industrial Land', 'ar' => 'أرض صناعية', 'icon' => 'construction', 'image_file' => 'studio.jpg'],
+            ['en' => 'Residential Land', 'ar' => 'أرض سكنية', 'icon' => 'home', 'image_file' => 'residential_land.png'],
+            ['en' => 'Commercial Land', 'ar' => 'أرض تجارية', 'icon' => 'store', 'image_file' => 'commercial_land.png'],
+            ['en' => 'Agricultural Land', 'ar' => 'أرض زراعية', 'icon' => 'nature', 'image_file' => 'agricultural_land.png'],
+            ['en' => 'Industrial Land', 'ar' => 'أرض صناعية', 'icon' => 'construction', 'image_file' => 'industrial_land.png'],
         ];
 
         $unitTypes = [];
@@ -284,88 +284,80 @@ class DemoContentSeeder extends Seeder
                 }
 
                 // Use the type-specific image
-                static $sharedTypeImages = [];
-                $imageFile = 'villa.jpg'; // fallback
+                $primaryImage = 'residential_land.png'; // fallback
                 if ($type->name_en === 'Commercial Land') {
-                    $imageFile = 'shop.jpg';
+                    $primaryImage = 'commercial_land.png';
                 } elseif ($type->name_en === 'Agricultural Land') {
-                    $imageFile = 'chalet.jpg';
+                    $primaryImage = 'agricultural_land.png';
                 } elseif ($type->name_en === 'Industrial Land') {
-                    $imageFile = 'studio.jpg';
-                }
-                $unitTypeSource = base_path('land types/' . $imageFile);
-
-                if (File::exists($unitTypeSource)) {
-                    if (!isset($sharedTypeImages[$type->id])) {
-                        $sharedTypeImages[$type->id] = [];
-                        for ($m = 1; $m <= 3; $m++) {
-                            $imageName = "demo-type-{$type->id}-{$m}.jpg";
-                            if (!Storage::disk('public')->exists('units/' . $imageName)) {
-                                File::copy($unitTypeSource, Storage::disk('public')->path('units/' . $imageName));
-                            }
-                            $sharedTypeImages[$type->id][] = 'units/' . $imageName;
-                        }
-                    }
-
-                    foreach ($sharedTypeImages[$type->id] as $index => $imageUrl) {
-                        UnitMedia::create([
-                            'unit_id' => $unit->id,
-                            'type' => 'image',
-                            'url' => $imageUrl,
-                            'order' => $index + 1,
-                            'processing_status' => 'completed'
-                        ]);
-                    }
+                    $primaryImage = 'industrial_land.png';
                 }
 
-                // Add Floorplan
-                static $sharedFloorplanUrl = null;
-                if (File::exists($floorplanSource)) {
-                    if (!$sharedFloorplanUrl) {
-                        $floorplanName = "demo-floorplan.png";
-                        if (!Storage::disk('public')->exists('units/' . $floorplanName)) {
-                            File::copy($floorplanSource, Storage::disk('public')->path('units/' . $floorplanName));
-                        }
-                        $sharedFloorplanUrl = 'units/' . $floorplanName;
+                // Pool of extra images
+                $extraImages = [
+                    'land_extra_1.png',
+                    'land_extra_2.png',
+                    'land_extra_3.png',
+                    'land_extra_4.png'
+                ];
+                shuffle($extraImages);
+
+                $imagesToCopy = [
+                    $primaryImage,
+                    $extraImages[0],
+                    $extraImages[1],
+                    $extraImages[2]
+                ];
+
+                foreach ($imagesToCopy as $mediaIndex => $srcImageName) {
+                    $sourcePath = base_path('land types/' . $srcImageName);
+                    $destName = "unit-{$unit->id}-" . ($mediaIndex + 1) . ".png";
+                    $destPath = 'units/' . $destName;
+
+                    if (File::exists($sourcePath)) {
+                        File::copy($sourcePath, Storage::disk('public')->path($destPath));
                     }
 
                     UnitMedia::create([
                         'unit_id' => $unit->id,
-                        'type' => 'floorplan',
-                        'url' => $sharedFloorplanUrl,
-                        'order' => 4,
+                        'type' => 'image',
+                        'url' => $destPath,
+                        'order' => $mediaIndex + 1,
                         'processing_status' => 'completed'
                     ]);
                 }
 
-                // Add Video
-                static $sharedVideoMedia = null;
-
-                if (File::exists($videoSource)) {
-                    if (!$sharedVideoMedia) {
-                        $unitVideoName = "demo-unit-video.mp4";
-                        if (!Storage::disk('public')->exists('units/' . $unitVideoName)) {
-                            File::copy($videoSource, Storage::disk('public')->path('units/' . $unitVideoName));
-                        }
-
-                        $sharedVideoMedia = UnitMedia::create([
-                            'unit_id' => $unit->id,
-                            'type' => 'video',
-                            'url' => 'units/' . $unitVideoName,
-                            'order' => 5,
-                            'processing_status' => 'pending'
-                        ]);
-                    } else {
-                        UnitMedia::create([
-                            'unit_id' => $unit->id,
-                            'type' => 'video',
-                            'url' => $sharedVideoMedia->url,
-                            'order' => 5,
-                            'processed_url' => 'units/hls/' . $sharedVideoMedia->id . '/playlist.m3u8',
-                            'processing_status' => 'completed'
-                        ]);
-                    }
+                // Add Floorplan
+                $floorplanName = "unit-{$unit->id}-floorplan.png";
+                $floorplanPath = 'units/' . $floorplanName;
+                if (File::exists($floorplanSource)) {
+                    File::copy($floorplanSource, Storage::disk('public')->path($floorplanPath));
                 }
+
+                UnitMedia::create([
+                    'unit_id' => $unit->id,
+                    'type' => 'floorplan',
+                    'url' => $floorplanPath,
+                    'order' => 5,
+                    'processing_status' => 'completed'
+                ]);
+
+                // Add Video
+                $videoFile = ($unit->id % 2 === 0) ? 'land_video_1.mp4' : 'land_video_2.mp4';
+                $videoSource = base_path('land types/' . $videoFile);
+                $unitVideoName = "unit-{$unit->id}-video.mp4";
+                $videoPath = 'units/' . $unitVideoName;
+                if (File::exists($videoSource)) {
+                    File::copy($videoSource, Storage::disk('public')->path($videoPath));
+                }
+
+                UnitMedia::create([
+                    'unit_id' => $unit->id,
+                    'type' => 'video',
+                    'url' => $videoPath,
+                    'order' => 6,
+                    'processing_status' => 'completed'
+                ]);
             }
         }
     }

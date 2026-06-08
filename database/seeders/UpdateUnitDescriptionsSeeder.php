@@ -14,10 +14,10 @@ class UpdateUnitDescriptionsSeeder extends Seeder
     {
         // 1. Seed land unit types if they don't exist
         $typesData = [
-            ['en' => 'Residential Land', 'ar' => 'أرض سكنية', 'icon' => 'home', 'image_file' => 'villa.jpg'],
-            ['en' => 'Commercial Land', 'ar' => 'أرض تجارية', 'icon' => 'store', 'image_file' => 'shop.jpg'],
-            ['en' => 'Agricultural Land', 'ar' => 'أرض زراعية', 'icon' => 'nature', 'image_file' => 'chalet.jpg'],
-            ['en' => 'Industrial Land', 'ar' => 'أرض صناعية', 'icon' => 'construction', 'image_file' => 'studio.jpg'],
+            ['en' => 'Residential Land', 'ar' => 'أرض سكنية', 'icon' => 'home', 'image_file' => 'residential_land.png'],
+            ['en' => 'Commercial Land', 'ar' => 'أرض تجارية', 'icon' => 'store', 'image_file' => 'commercial_land.png'],
+            ['en' => 'Agricultural Land', 'ar' => 'أرض زراعية', 'icon' => 'nature', 'image_file' => 'agricultural_land.png'],
+            ['en' => 'Industrial Land', 'ar' => 'أرض صناعية', 'icon' => 'construction', 'image_file' => 'industrial_land.png'],
         ];
 
         \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('unit-types');
@@ -40,15 +40,15 @@ class UpdateUnitDescriptionsSeeder extends Seeder
 
         // 2. Clean up old amenities and seed land amenities
         $landAmenitiesData = [
-            ['name_en' => 'Water Network', 'name_ar' => 'شبكة مياه', 'icon_file' => 'pool.jpg'],
-            ['name_en' => 'Agricultural Irrigation', 'name_ar' => 'مياه ري', 'icon_file' => 'garden.jpg'],
-            ['name_en' => 'Security', 'name_ar' => 'أمن وحراسة', 'icon_file' => 'security.jpg'],
-            ['name_en' => 'Paved Road', 'name_ar' => 'طريق ممهد', 'icon_file' => 'parking.jpg'],
-            ['name_en' => 'Building Permit', 'name_ar' => 'ترخيص بناء', 'icon_file' => 'elevator.jpg'],
-            ['name_en' => 'Fenced Land', 'name_ar' => 'سور محيط', 'icon_file' => 'gardens.jpg'],
-            ['name_en' => 'Electricity', 'name_ar' => 'كهرباء', 'icon_file' => 'airconditioner.jpg'],
-            ['name_en' => 'Sewage Network', 'name_ar' => 'شبكة صرف صحي', 'icon_file' => 'maintenance.jpg'],
-            ['name_en' => 'Natural Gas', 'name_ar' => 'غاز طبيعي', 'icon_file' => 'kitchenequipments.jpg'],
+            ['name_en' => 'Water Network', 'name_ar' => 'شبكة مياه', 'icon_file' => 'water_pipe_icon.png'],
+            ['name_en' => 'Agricultural Irrigation', 'name_ar' => 'مياه ري', 'icon_file' => 'irrigation_icon.png'],
+            ['name_en' => 'Security', 'name_ar' => 'أمن وحراسة', 'icon_file' => 'security_gate_icon.png'],
+            ['name_en' => 'Paved Road', 'name_ar' => 'طريق ممهد', 'icon_file' => 'paved_road_icon.png'],
+            ['name_en' => 'Building Permit', 'name_ar' => 'ترخيص بناء', 'icon_file' => 'blueprint_icon.png'],
+            ['name_en' => 'Fenced Land', 'name_ar' => 'سور محيط', 'icon_file' => 'fence_icon.png'],
+            ['name_en' => 'Electricity', 'name_ar' => 'كهرباء', 'icon_file' => 'electricity_tower_icon.png'],
+            ['name_en' => 'Sewage Network', 'name_ar' => 'شبكة صرف صحي', 'icon_file' => 'drainage_icon.png'],
+            ['name_en' => 'Natural Gas', 'name_ar' => 'غاز طبيعي', 'icon_file' => 'gas_pipeline_icon.png'],
             ['name_en' => 'Sea View', 'name_ar' => 'إطلالة على البحر', 'icon_file' => 'seaview.jpg'],
         ];
 
@@ -66,7 +66,8 @@ class UpdateUnitDescriptionsSeeder extends Seeder
 
         $amenityIds = [];
         foreach ($landAmenitiesData as $index => $amenity) {
-            $imageName = "amenity-" . ($index + 1) . ".jpg";
+            $extension = pathinfo($amenity['icon_file'], PATHINFO_EXTENSION);
+            $imageName = "amenity-" . ($index + 1) . "." . $extension;
             $sourceFile = base_path('images/' . $amenity['icon_file']);
 
             if (\Illuminate\Support\Facades\File::exists($sourceFile)) {
@@ -172,33 +173,49 @@ class UpdateUnitDescriptionsSeeder extends Seeder
             // 3. Recreate UnitMedia (images, floorplan, video)
             $unit->media()->delete();
 
-            $imageFile = 'villa.jpg';
+            // Setup image sources
+            $primaryImage = 'residential_land.png';
             if ($unitType) {
                 if ($unitType->name_en === 'Commercial Land') {
-                    $imageFile = 'shop.jpg';
+                    $primaryImage = 'commercial_land.png';
                 } elseif ($unitType->name_en === 'Agricultural Land') {
-                    $imageFile = 'chalet.jpg';
+                    $primaryImage = 'agricultural_land.png';
                 } elseif ($unitType->name_en === 'Industrial Land') {
-                    $imageFile = 'studio.jpg';
+                    $primaryImage = 'industrial_land.png';
                 }
-            }
-            $unitTypeSource = base_path('land types/' . $imageFile);
-            
-            $sharedTypeImages = [];
-            for ($m = 1; $m <= 3; $m++) {
-                $imageName = "demo-type-" . ($unitType ? $unitType->id : 'default') . "-{$m}.jpg";
-                $targetPath = 'units/' . $imageName;
-                if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($targetPath) && \Illuminate\Support\Facades\File::exists($unitTypeSource)) {
-                    \Illuminate\Support\Facades\File::copy($unitTypeSource, \Illuminate\Support\Facades\Storage::disk('public')->path($targetPath));
-                }
-                $sharedTypeImages[] = $targetPath;
             }
 
-            foreach ($sharedTypeImages as $mediaIndex => $imageUrl) {
+            // Pool of extra images
+            $extraImages = [
+                'land_extra_1.png',
+                'land_extra_2.png',
+                'land_extra_3.png',
+                'land_extra_4.png'
+            ];
+            // Shuffle to get a random order
+            shuffle($extraImages);
+
+            // Select 3 random extra images + 1 primary image
+            $imagesToCopy = [
+                $primaryImage,
+                $extraImages[0],
+                $extraImages[1],
+                $extraImages[2]
+            ];
+
+            foreach ($imagesToCopy as $mediaIndex => $srcImageName) {
+                $sourcePath = base_path('land types/' . $srcImageName);
+                $destName = "unit-{$unit->id}-" . ($mediaIndex + 1) . ".png";
+                $destPath = 'units/' . $destName;
+
+                if (\Illuminate\Support\Facades\File::exists($sourcePath)) {
+                    \Illuminate\Support\Facades\File::copy($sourcePath, \Illuminate\Support\Facades\Storage::disk('public')->path($destPath));
+                }
+
                 \App\Models\UnitMedia::create([
                     'unit_id' => $unit->id,
                     'type' => 'image',
-                    'url' => $imageUrl,
+                    'url' => $destPath,
                     'order' => $mediaIndex + 1,
                     'processing_status' => 'completed'
                 ]);
@@ -206,9 +223,9 @@ class UpdateUnitDescriptionsSeeder extends Seeder
 
             // Floorplan
             $floorplanSource = base_path('land types/floorplan.png');
-            $floorplanName = "demo-floorplan.png";
+            $floorplanName = "unit-{$unit->id}-floorplan.png";
             $floorplanPath = 'units/' . $floorplanName;
-            if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($floorplanPath) && \Illuminate\Support\Facades\File::exists($floorplanSource)) {
+            if (\Illuminate\Support\Facades\File::exists($floorplanSource)) {
                 \Illuminate\Support\Facades\File::copy($floorplanSource, \Illuminate\Support\Facades\Storage::disk('public')->path($floorplanPath));
             }
             
@@ -216,15 +233,16 @@ class UpdateUnitDescriptionsSeeder extends Seeder
                 'unit_id' => $unit->id,
                 'type' => 'floorplan',
                 'url' => $floorplanPath,
-                'order' => 4,
+                'order' => 5,
                 'processing_status' => 'completed'
             ]);
 
-            // Video
-            $videoSource = base_path('land types/videoplayback.mp4');
-            $unitVideoName = "demo-unit-video.mp4";
+            // Video (distribution between land_video_1 and land_video_2)
+            $videoFile = ($unit->id % 2 === 0) ? 'land_video_1.mp4' : 'land_video_2.mp4';
+            $videoSource = base_path('land types/' . $videoFile);
+            $unitVideoName = "unit-{$unit->id}-video.mp4";
             $videoPath = 'units/' . $unitVideoName;
-            if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($videoPath) && \Illuminate\Support\Facades\File::exists($videoSource)) {
+            if (\Illuminate\Support\Facades\File::exists($videoSource)) {
                 \Illuminate\Support\Facades\File::copy($videoSource, \Illuminate\Support\Facades\Storage::disk('public')->path($videoPath));
             }
 
@@ -232,7 +250,7 @@ class UpdateUnitDescriptionsSeeder extends Seeder
                 'unit_id' => $unit->id,
                 'type' => 'video',
                 'url' => $videoPath,
-                'order' => 5,
+                'order' => 6,
                 'processing_status' => 'completed',
             ]);
         }

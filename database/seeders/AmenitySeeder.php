@@ -22,22 +22,23 @@ class AmenitySeeder extends Seeder
 
         $targetDir = 'amenities';
         $amenities = [
-            ['name_en' => 'Water Network', 'name_ar' => 'شبكة مياه', 'icon_file' => 'pool.jpg'],
-            ['name_en' => 'Agricultural Irrigation', 'name_ar' => 'مياه ري', 'icon_file' => 'garden.jpg'],
-            ['name_en' => 'Security', 'name_ar' => 'أمن وحراسة', 'icon_file' => 'security.jpg'],
-            ['name_en' => 'Paved Road', 'name_ar' => 'طريق ممهد', 'icon_file' => 'parking.jpg'],
-            ['name_en' => 'Building Permit', 'name_ar' => 'ترخيص بناء', 'icon_file' => 'elevator.jpg'],
-            ['name_en' => 'Fenced Land', 'name_ar' => 'سور محيط', 'icon_file' => 'gardens.jpg'],
-            ['name_en' => 'Electricity', 'name_ar' => 'كهرباء', 'icon_file' => 'airconditioner.jpg'],
-            ['name_en' => 'Sewage Network', 'name_ar' => 'شبكة صرف صحي', 'icon_file' => 'maintenance.jpg'],
-            ['name_en' => 'Natural Gas', 'name_ar' => 'غاز طبيعي', 'icon_file' => 'kitchenequipments.jpg'],
+            ['name_en' => 'Water Network', 'name_ar' => 'شبكة مياه', 'icon_file' => 'water_pipe_icon.png'],
+            ['name_en' => 'Agricultural Irrigation', 'name_ar' => 'مياه ري', 'icon_file' => 'irrigation_icon.png'],
+            ['name_en' => 'Security', 'name_ar' => 'أمن وحراسة', 'icon_file' => 'security_gate_icon.png'],
+            ['name_en' => 'Paved Road', 'name_ar' => 'طريق ممهد', 'icon_file' => 'paved_road_icon.png'],
+            ['name_en' => 'Building Permit', 'name_ar' => 'ترخيص بناء', 'icon_file' => 'blueprint_icon.png'],
+            ['name_en' => 'Fenced Land', 'name_ar' => 'سور محيط', 'icon_file' => 'fence_icon.png'],
+            ['name_en' => 'Electricity', 'name_ar' => 'كهرباء', 'icon_file' => 'electricity_tower_icon.png'],
+            ['name_en' => 'Sewage Network', 'name_ar' => 'شبكة صرف صحي', 'icon_file' => 'drainage_icon.png'],
+            ['name_en' => 'Natural Gas', 'name_ar' => 'غاز طبيعي', 'icon_file' => 'gas_pipeline_icon.png'],
             ['name_en' => 'Sea View', 'name_ar' => 'إطلالة على البحر', 'icon_file' => 'seaview.jpg'],
         ];
 
         Storage::disk('public')->makeDirectory($targetDir);
 
         foreach ($amenities as $index => $amenity) {
-            $imageName = "amenity-" . ($index + 1) . ".jpg";
+            $extension = pathinfo($amenity['icon_file'], PATHINFO_EXTENSION);
+            $imageName = "amenity-" . ($index + 1) . "." . $extension;
             $sourceFile = base_path('images/' . $amenity['icon_file']);
 
             if (File::exists($sourceFile)) {

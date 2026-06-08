@@ -9,7 +9,7 @@ class PulseDashboard extends Page
 {
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-cpu-chip';
 
-    protected static string $view = 'filament.pages.pulse-dashboard';
+    protected string $view = 'filament.pages.pulse-dashboard';
 
     public static function getNavigationLabel(): string
     {

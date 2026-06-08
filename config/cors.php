@@ -22,14 +22,14 @@ return [
     'allowed_origins' => [
         'https://propix8.com',
         'https://www.propix8.com',
-        env('FRONTEND_URL', 'https://propix8.com'),
+        env('FRONTEND_URL', 'https://aqarmousa.com'),
         'http://localhost:5173', // Vite default
         'http://localhost:3000', // React default
         'http://localhost:8080',
         'http://127.0.0.1:5173',
         'http://127.0.0.1:3000',
         'http://127.0.0.1:8000',
-        'https://propix8-nine.vercel.app',
+        'https://aqar-mousa.vercel.app',
     ],
 
     'allowed_origins_patterns' => [],

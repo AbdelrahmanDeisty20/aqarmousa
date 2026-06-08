@@ -3,10 +3,11 @@
 namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
+use BackedEnum;
 
 class PulseDashboard extends Page
 {
-    protected static $navigationIcon = 'heroicon-o-cpu-chip';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-cpu-chip';
 
     protected static string $view = 'filament.pages.pulse-dashboard';
 

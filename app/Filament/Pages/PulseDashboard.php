@@ -6,7 +6,7 @@ use Filament\Pages\Page;
 
 class PulseDashboard extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-cpu-chip';
+    protected static $navigationIcon = 'heroicon-o-cpu-chip';
 
     protected static string $view = 'filament.pages.pulse-dashboard';
 

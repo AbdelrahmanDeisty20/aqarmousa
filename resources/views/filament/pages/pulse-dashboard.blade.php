@@ -88,6 +88,63 @@
                             : 'Reveals the most active users or accounts requesting site pages over the last hour, helping spot any attacks or unusual load.' }}
                     </p>
                 </div>
+
+                <!-- Card 4: Servers -->
+                <div class="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-100 dark:border-gray-700/50 hover:border-indigo-500/30 transition-all duration-300">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                            <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                            </svg>
+                        </span>
+                        <h4 class="font-semibold text-gray-900 dark:text-white">
+                            {{ app()->getLocale() === 'ar' ? 'استهلاك السيرفر (Servers)' : 'Server Resources' }}
+                        </h4>
+                    </div>
+                    <p class="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                        {{ app()->getLocale() === 'ar' 
+                            ? 'يعرض مدى استهلاك السيرفر من المعالج (CPU)، والذاكرة (Memory)، والمساحة التخزينية. من المهم متابعتها لتجنب توقف السيرفر المفاجئ.' 
+                            : 'Shows server CPU, Memory, and storage utilization. Crucial to monitor to prevent sudden system downtime.' }}
+                    </p>
+                </div>
+
+                <!-- Card 5: Slow Queries & Requests -->
+                <div class="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-100 dark:border-gray-700/50 hover:border-indigo-500/30 transition-all duration-300">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                            <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </span>
+                        <h4 class="font-semibold text-gray-900 dark:text-white">
+                            {{ app()->getLocale() === 'ar' ? 'الاستعلامات والطلبات البطيئة' : 'Slow Queries & Requests' }}
+                        </h4>
+                    </div>
+                    <p class="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                        {{ app()->getLocale() === 'ar' 
+                            ? 'يكشف الصفحات واستعلامات قاعدة البيانات التي تستغرق وقتاً طويلاً للتحميل (أكثر من ثانية)، لتوجيه المطور لتحسين وتطوير كفاءتها.' 
+                            : 'Identifies slow loading pages or database queries taking a long time, helping developers optimize app performance.' }}
+                    </p>
+                </div>
+
+                <!-- Card 6: Exceptions -->
+                <div class="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-100 dark:border-gray-700/50 hover:border-indigo-500/30 transition-all duration-300">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="p-2 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400">
+                            <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </span>
+                        <h4 class="font-semibold text-gray-900 dark:text-white">
+                            {{ app()->getLocale() === 'ar' ? 'الأخطاء والاعتراضات (Exceptions)' : 'Application Errors' }}
+                        </h4>
+                    </div>
+                    <p class="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                        {{ app()->getLocale() === 'ar' 
+                            ? 'يعرض أي أخطاء برمجية واجهت زوار الموقع أثناء التصفح بشكل مفصل لتسهيل تتبع المشاكل وإصلاحها وحماية تجربة المستخدم.' 
+                            : 'Displays application errors and exceptions encountered by users, allowing developers to debug and fix bugs easily.' }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>

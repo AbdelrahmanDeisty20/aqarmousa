@@ -1,10 +1,23 @@
-RewriteEngine On
+DirectoryIndex index.html index.php
 
-# تجاهل فولدر frontend
-RewriteCond %{REQUEST_URI} ^/frontend [NC]
-RewriteRule ^ - [L]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
 
-# Laravel
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.php [L]
+    # 1. استثناء الملفات الحقيقية (الصور، الـ CSS، الـ JS)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # 2. حجز مسار اللغة للأدمن فقط (عشان i18 بتاعة الريأكت متشوفوش)
+    # أي طلب يبدأ بـ /lang يروح فوراً للارافل ويوقف بحث
+    RewriteCond %{REQUEST_URI} ^/lang [NC]
+    RewriteRule ^ index.php [L]
+
+    # 3. استثناء مسارات الأدمن والـ API
+    RewriteCond %{REQUEST_URI} ^/(admin|api|livewire|filament) [NC]
+    RewriteRule ^ index.php [L]
+
+    # 4. أي حاجة تانية تروح للريأكت (وهو يتعامل بـ i18 بتاعته داخلياً)
+    RewriteRule ^ index.html [L]
+</IfModule>

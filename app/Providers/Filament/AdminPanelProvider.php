@@ -100,7 +100,7 @@ class AdminPanelProvider extends PanelProvider
             ->navigationItems([
                 NavigationItem::make()
                     ->label(fn() => __('admin.view_website'))
-                    ->url(fn(): string => config('app.frontend_url', '#'))
+                    ->url('https://aqarmousa.com/')
                     ->icon('heroicon-o-globe-alt')
                     ->group(fn() => __('admin.quick_links'))
                     ->sort(-1),
@@ -108,7 +108,7 @@ class AdminPanelProvider extends PanelProvider
             ->userMenuItems([
                 'view_website' => MenuItem::make()
                     ->label(fn() => __('admin.view_website'))
-                    ->url(fn(): string => config('app.frontend_url', '#'))
+                    ->url('https://aqarmousa.com/')
                     ->icon('heroicon-o-globe-alt'),
             ]);
     }

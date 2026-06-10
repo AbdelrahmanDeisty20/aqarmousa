@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ActivityLog;
 
 class Viewing extends Model
 {
@@ -34,6 +35,19 @@ class Viewing extends Model
 
     protected static function booted()
     {
+        static::created(function (Viewing $record) {
+            $unit = $record->unit;
+            $unitTitle = $unit ? $unit->title_ar : 'عقار';
+            ActivityLog::log('طلب معاينة', "تم تقديم طلب معاينة جديد للعقار ({$unitTitle}) من قبل: {$record->name} ({$record->email}) بتاريخ {$record->date} في تمام {$record->time}");
+        });
+
+        static::updated(function (Viewing $record) {
+            $oldStatus = $record->getOriginal('status');
+            if ($record->status !== $oldStatus) {
+                ActivityLog::log('تحديث حالة المعاينة', "تم تحديث حالة طلب المعاينة الخاص بـ ({$record->name}) إلى: {$record->status}");
+            }
+        });
+
         static::saved(function (Viewing $record) {
             $oldStatus = $record->getOriginal('status');
             $oldDate = $record->getOriginal('date');

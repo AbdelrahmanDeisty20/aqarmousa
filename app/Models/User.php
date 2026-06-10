@@ -12,11 +12,23 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use App\Notifications\ApiVerifyEmail;
+use App\Models\ActivityLog;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens, HasRoles, HasPanelShield;
+
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            ActivityLog::log('حساب جديد', "تم إنشاء حساب مستخدم جديد باسم: {$user->name} بريد إلكتروني: {$user->email}");
+        });
+
+        static::deleted(function (User $user) {
+            ActivityLog::log('حذف مستخدم', "تم حذف حساب المستخدم: {$user->name} ({$user->email})");
+        });
+    }
 
     /**
      * Send the email verification notification.

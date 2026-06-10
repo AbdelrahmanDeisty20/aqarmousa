@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ActivityLog;
 
 class Unit extends Model
 {
@@ -68,12 +69,18 @@ class Unit extends Model
             if ($unit->status === 'available') {
                 $unit->notifyBuyersInGovernorate();
             }
+            ActivityLog::log('إضافة عقار/أرض', "تمت إضافة عقار جديد بعنوان: ({$unit->title_ar}) بسعر {$unit->price}");
         });
 
         static::updated(function (Unit $unit) {
             if ($unit->wasChanged('status') && $unit->status === 'available') {
                 $unit->notifyBuyersInGovernorate();
             }
+            ActivityLog::log('تعديل عقار/أرض', "تم تعديل عقار بعنوان: ({$unit->title_ar})");
+        });
+
+        static::deleted(function (Unit $unit) {
+            ActivityLog::log('حذف عقار/أرض', "تم حذف عقار بعنوان: ({$unit->title_ar})");
         });
     }
 

@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\Viewing;
+use App\Models\PageVisit;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -98,6 +99,18 @@ class StatsOverview extends StatsOverviewWidget
                         ],
                     ],
                 ])),
+
+            Stat::make(__('admin.widgets.stats_overview.total_visitors'), PageVisit::distinct('ip_address')->count())
+                ->description(__('admin.widgets.stats_overview.total_visitors_desc'))
+                ->descriptionIcon('heroicon-m-eye')
+                ->icon('heroicon-o-eye')
+                ->color('success'),
+
+            Stat::make(__('admin.widgets.stats_overview.page_views'), PageVisit::count())
+                ->description(__('admin.widgets.stats_overview.page_views_desc'))
+                ->descriptionIcon('heroicon-m-chart-bar')
+                ->icon('heroicon-o-chart-bar')
+                ->color('info'),
 
             // Payment system disabled - Transaction stats commented out
             /*

@@ -26,3 +26,4 @@ class BannerController extends Controller
         return $this->success(BannerResource::collection($banners));
     }
 }
+//aaaaaaaa

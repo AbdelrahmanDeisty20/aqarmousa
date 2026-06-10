@@ -22,16 +22,33 @@ class PageVisit extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function logVisit(): self
+    public static function logVisit(): ?self
     {
-        // Don't log admin assets/requests or livewire updates to keep page_visits clean
         $path = Request::path();
-        if (str_starts_with($path, 'admin') || str_starts_with($path, 'livewire') || Request::wantsJson()) {
-            return new self();
+        $ip = Request::ip();
+
+        // استثناء مسارات لوحة التحكم وأكواد الخلفية
+        if (
+            str_starts_with($path, 'admin') ||
+            str_starts_with($path, 'livewire') ||
+            str_starts_with($path, '_filament') ||
+            str_starts_with($path, 'up')
+        ) {
+            return null;
+        }
+
+        // لمنع تكرار تسجيل الزيارة لنفس الشخص بسبب طلبات الـ API المتعددة المتزامنة في الـ React
+        // نقوم بالتحقق إذا كان نفس الـ IP قد سجل زيارة في آخر دقيقة
+        $recentVisit = self::where('ip_address', $ip)
+            ->where('created_at', '>=', now()->subMinute())
+            ->exists();
+
+        if ($recentVisit) {
+            return null;
         }
 
         return self::create([
-            'ip_address' => Request::ip(),
+            'ip_address' => $ip,
             'user_agent' => Request::userAgent(),
             'url' => Request::fullUrl(),
             'referer' => Request::header('referer'),

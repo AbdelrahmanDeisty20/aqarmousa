@@ -15,7 +15,7 @@ class VerificationController extends Controller
     public function verify(Request $request, $id, $hash)
     {
         if (!$request->hasValidSignature()) {
-            return $this->error(__('api.verification.invalid_link'), 403);
+            return redirect(config('app.frontend_url') . '/signin?invalid_link=1');
         }
 
         $user = User::findOrFail($id);

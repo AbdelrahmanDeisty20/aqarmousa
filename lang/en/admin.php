@@ -11,6 +11,8 @@ return [
     'resources' => [
         'activity_log' => 'Activity Log',
         'activity_logs' => 'Activity Logs',
+        'page_visit' => 'Site Visit',
+        'page_visits' => 'Site Visits',
         'governorate' => 'Governorate',
         'governorates' => 'Governorates',
         'compound' => 'Compound',

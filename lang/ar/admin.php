@@ -11,6 +11,8 @@ return [
     'resources' => [
         'activity_log' => 'سجل العملية',
         'activity_logs' => 'سجلات العمليات',
+        'page_visit' => 'زيارة الموقع',
+        'page_visits' => 'زيارات الموقع',
         'governorate' => 'المحافظة',
         'governorates' => 'المحافظات',
         'compound' => 'الكومباوند',

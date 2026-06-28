@@ -27,7 +27,7 @@ class UnitListResource extends JsonResource
                     ->exists();
             }),
             "address" => ($lang === "ar" ? $this->address_ar : $this->address_en) ?? "",
-            "price" => $this->price ?? 0,
+            "price" => $this->price !== null ? (float) $this->price : null,
             "discount" => $this->discount ?? 0,
             "status" => $this->status ?? "",
             "offer_type" => $this->offer_type ?? "",

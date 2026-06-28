@@ -76,7 +76,7 @@ class UnitForm
                                         ->label(__('admin.fields.price'))
                                         ->numeric()
                                         ->prefix('EGP')
-                                        ->required(),
+                                        ->nullable(),
 
                                     TextInput::make('discount')
                                         ->label(__('admin.fields.discount' ?? 'Discount'))

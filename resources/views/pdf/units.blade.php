@@ -28,7 +28,7 @@
             <tr>
                 <td>{{ $unit->id }}</td>
                 <td>{{ $unit->{'title_' . app()->getLocale()} ?? $unit->title_ar }}</td>
-                <td>{{ number_format($unit->price) }} EGP</td>
+                <td>{{ $unit->price ? number_format($unit->price) . ' EGP' : '-' }}</td>
                 <td>{{ $unit->area }} m²</td>
                 <td>{{ $unit->status }}</td>
             </tr>

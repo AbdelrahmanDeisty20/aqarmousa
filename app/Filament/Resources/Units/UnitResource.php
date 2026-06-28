@@ -65,7 +65,7 @@ class UnitResource extends Resource
     public static function getGlobalSearchResultDetails(\Illuminate\Database\Eloquent\Model $record): array
     {
         return [
-            __('admin.fields.price') => number_format($record->price) . ' EGP',
+            __('admin.fields.price') => $record->price ? number_format($record->price) . ' EGP' : '-',
             __('admin.fields.status') => __('admin.fields.statuses.' . $record->status),
         ];
     }

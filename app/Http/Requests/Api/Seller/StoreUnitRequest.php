@@ -20,7 +20,7 @@ class StoreUnitRequest extends FormRequest
             'description_en' => 'nullable|string',
             'address_ar' => 'required|string|max:500',
             'address_en' => 'nullable|string|max:500',
-            'price' => 'required|numeric',
+            'price' => 'nullable|numeric',
             'offer_type' => 'required|in:sale,rent',
             'area' => 'required|numeric',
             'rooms' => 'nullable|integer',

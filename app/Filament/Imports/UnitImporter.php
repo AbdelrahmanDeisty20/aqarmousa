@@ -90,11 +90,10 @@ class UnitImporter extends Importer
                 ->rules(['nullable', 'max:255'])
                 ->example('El Teseen St, Fifth Settlement'),
             ImportColumn::make('price')
-                ->label('السعر')
+                ->label('السعر (اختياري)')
                 ->guess(['السعر', 'سعر', 'price'])
-                ->requiredMapping()
                 ->numeric()
-                ->rules(['required', 'numeric'])
+                ->rules(['nullable', 'numeric'])
                 ->example('5000000'),
             ImportColumn::make('discount')
                 ->label('الخصم (اختياري)')
@@ -143,7 +142,7 @@ class UnitImporter extends Importer
             ImportColumn::make('category')
                 ->label('التصنيف (land/property)')
                 ->guess(['التصنيف', 'category'])
-                ->default('land')
+                ->castStateUsing(fn (?string $state) => blank($state) ? 'land' : $state)
                 ->rules(['required', 'in:land,property'])
                 ->example('land'),
             ImportColumn::make('rooms')

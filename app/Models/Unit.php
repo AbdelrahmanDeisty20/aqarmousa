@@ -69,7 +69,8 @@ class Unit extends Model
             if ($unit->status === 'available') {
                 $unit->notifyBuyersInGovernorate();
             }
-            ActivityLog::log('إضافة عقار/أرض', "تمت إضافة عقار جديد بعنوان: ({$unit->title_ar}) بسعر {$unit->price}");
+            $priceText = $unit->price ? number_format($unit->price) . ' EGP' : 'غير محدد';
+            ActivityLog::log('إضافة عقار/أرض', "تمت إضافة عقار جديد بعنوان: ({$unit->title_ar}) بسعر {$priceText}");
         });
 
         static::updated(function (Unit $unit) {

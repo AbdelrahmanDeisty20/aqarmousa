@@ -10,14 +10,40 @@ class Setting extends Model
     protected $fillable = ['key', 'value', 'type'];
 
     /**
-     * Get a setting value by key.
+     * Cache key for all site settings.
      */
-    public static function getValue(string $key, $default = null)
-    {
-        $setting = self::where('key', $key)->first();
+    public const CACHE_KEY = 'site_settings_all';
 
+    /**
+     * Boot model and attach event listeners to flush cache on change.
+     */
+    protected static function booted()
+    {
+        static::saved(function () {
+            static::clearCache();
+        });
+
+        static::deleted(function () {
+            static::clearCache();
+        });
+    }
+
+    /**
+     * Clear all settings cache.
+     */
+    public static function clearCache(): void
+    {
+        \Illuminate\Support\Facades\Cache::forget(self::CACHE_KEY);
+        \Illuminate\Support\Facades\Cache::forget('site_settings_formatted_api');
+    }
+
+    /**
+     * Format a setting record value based on type.
+     */
+    public static function formatSettingValue($setting)
+    {
         if (!$setting) {
-            return $default;
+            return null;
         }
 
         if ($setting->type === 'image' && $setting->value) {
@@ -40,13 +66,36 @@ class Setting extends Model
     }
 
     /**
+     * Get a setting value by key (cached).
+     */
+    public static function getValue(string $key, $default = null)
+    {
+        $allSettings = \Illuminate\Support\Facades\Cache::remember(self::CACHE_KEY, 86400, function () {
+            return self::all();
+        });
+
+        $setting = $allSettings->firstWhere('key', $key);
+
+        if (!$setting) {
+            return $default;
+        }
+
+        return self::formatSettingValue($setting);
+    }
+
+    /**
      * Set a setting value.
      */
     public static function setValue(string $key, $value, string $type = 'text')
     {
-        return self::updateOrCreate(
+        $setting = self::updateOrCreate(
             ['key' => $key],
             ['value' => $value, 'type' => $type]
         );
+
+        self::clearCache();
+
+        return $setting;
     }
+
 }

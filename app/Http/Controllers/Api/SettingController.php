@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
@@ -29,10 +30,15 @@ class SettingController extends Controller
             'social_twitter',
         ];
 
-        $settings = [];
-        foreach ($keys as $key) {
-            $settings[$key] = Setting::getValue($key);
-        }
+        $settings = Cache::remember('site_settings_formatted_api', 86400, function () use ($keys) {
+            $allSettings = Setting::all();
+            $result = [];
+            foreach ($keys as $key) {
+                $setting = $allSettings->firstWhere('key', $key);
+                $result[$key] = $setting ? Setting::formatSettingValue($setting) : null;
+            }
+            return $result;
+        });
 
         return $this->success($settings);
     }

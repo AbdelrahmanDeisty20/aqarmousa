@@ -9,12 +9,20 @@ Artisan::command('inspire', function () {
 
 use Illuminate\Support\Facades\Schedule;
 
-Schedule::command('queue:work --max-time=30')
-    ->everyMinute()
-    ->withoutOverlapping();
+Schedule::command('queue:work --stop-when-empty --max-jobs=50')
+    ->everyFiveMinutes()
+    ->withoutOverlapping()
+    ->onOneServer();
 
 // Clean up expired password reset tokens hourly
-Schedule::command('auth:clear-resets')->hourly();
+Schedule::command('auth:clear-resets')
+    ->hourly()
+    ->withoutOverlapping()
+    ->onOneServer();
 
 // Clean up expired API tokens daily to keep the database light
-Schedule::command('sanctum:prune-expired --hours=24')->daily();
+Schedule::command('sanctum:prune-expired --hours=24')
+    ->daily()
+    ->withoutOverlapping()
+    ->onOneServer();
+

@@ -43,7 +43,7 @@ Route::get('/services/{id}', [App\Http\Controllers\Api\ServiceController::class,
 Route::get('/units/{id}/related', [App\Http\Controllers\Api\UnitController::class, 'related']);
 Route::get('/testimonials', [App\Http\Controllers\Api\TestimonialController::class, 'index']);
 Route::post('/contact', [App\Http\Controllers\Api\ContactController::class, 'store']);
-Route::get('/settings', [App\Http\Controllers\Api\SettingController::class, 'index']);
+Route::get('/settings', [App\Http\Controllers\Api\SettingController::class, 'index'])->middleware('throttle:60,1');
 Route::get('/banners', [BannerController::class, 'index']);
 Route::get('/maintenance-services', [MaintenanceController::class, 'index']);
 Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'maintenance'], function () {
@@ -52,7 +52,8 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'maintenance'], functi
     Route::put('bookings/{booking}', [MaintenanceController::class, 'update']);
     Route::delete('bookings/{booking}', [MaintenanceController::class, 'destroy']);
 });
-Route::get('/settings/{key}', [App\Http\Controllers\Api\SettingController::class, 'show']);
+Route::get('/settings/{key}', [App\Http\Controllers\Api\SettingController::class, 'show'])->middleware('throttle:60,1');
+
 Route::get('/stats', [App\Http\Controllers\Api\StatsController::class, 'index']);
 
 Route::get('/search', [SearchController::class, 'globalSearch']);

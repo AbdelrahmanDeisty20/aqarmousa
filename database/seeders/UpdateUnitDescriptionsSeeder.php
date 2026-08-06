@@ -18,6 +18,9 @@ class UpdateUnitDescriptionsSeeder extends Seeder
             ['en' => 'Commercial Land', 'ar' => 'أرض تجارية', 'icon' => 'store', 'image_file' => 'commercial_land.png'],
             ['en' => 'Agricultural Land', 'ar' => 'أرض زراعية', 'icon' => 'nature', 'image_file' => 'agricultural_land.png'],
             ['en' => 'Industrial Land', 'ar' => 'أرض صناعية', 'icon' => 'construction', 'image_file' => 'industrial_land.png'],
+            ['en' => 'Coastal Land', 'ar' => 'أرض ساحلية', 'icon' => 'beach_access', 'image_file' => 'land_extra_1.png'],
+            ['en' => 'Investment Land', 'ar' => 'أرض استثمارية', 'icon' => 'trending_up', 'image_file' => 'land_extra_2.png'],
+            ['en' => 'Service Land', 'ar' => 'أرض خدمية', 'icon' => 'business', 'image_file' => 'land_extra_3.png'],
         ];
 
         \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('unit-types');

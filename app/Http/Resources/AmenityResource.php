@@ -18,7 +18,7 @@ class AmenityResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => (app()->getLocale() === 'ar' ? $this->name_ar : $this->name_en) ?? '',
-            'icon' => $this->icon ? Storage::disk('public')->url($this->icon) : '',
+            'icon' => $this->icon ? ((str_starts_with($this->icon, 'http://') || str_starts_with($this->icon, 'https://')) ? $this->icon : Storage::disk('public')->url($this->icon)) : '',
         ];
     }
 }

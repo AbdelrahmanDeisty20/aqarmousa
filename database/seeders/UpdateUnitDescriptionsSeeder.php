@@ -173,86 +173,85 @@ class UpdateUnitDescriptionsSeeder extends Seeder
                 $unit->amenities()->sync($randomAmenities);
             }
 
-            // 3. Recreate UnitMedia (images, floorplan, video)
+            // 3. Recreate UnitMedia (high resolution online HTTP image URLs)
             $unit->media()->delete();
 
-            // Setup image sources
-            $primaryImage = 'residential_land.png';
-            if ($unitType) {
-                if ($unitType->name_en === 'Commercial Land') {
-                    $primaryImage = 'commercial_land.png';
-                } elseif ($unitType->name_en === 'Agricultural Land') {
-                    $primaryImage = 'agricultural_land.png';
-                } elseif ($unitType->name_en === 'Industrial Land') {
-                    $primaryImage = 'industrial_land.png';
-                }
-            }
-
-            // Pool of extra images
-            $extraImages = [
-                'land_extra_1.png',
-                'land_extra_2.png',
-                'land_extra_3.png',
-                'land_extra_4.png'
+            $onlineLandImages = [
+                'Residential Land' => [
+                    'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1511497584788-8767611136f6?q=80&w=1200&auto=format&fit=crop'
+                ],
+                'Commercial Land' => [
+                    'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop'
+                ],
+                'Agricultural Land' => [
+                    'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1200&auto=format&fit=crop'
+                ],
+                'Industrial Land' => [
+                    'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop'
+                ],
+                'Coastal Land' => [
+                    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop'
+                ],
+                'Investment Land' => [
+                    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1511497584788-8767611136f6?q=80&w=1200&auto=format&fit=crop'
+                ],
+                'Service Land' => [
+                    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1200&auto=format&fit=crop'
+                ]
             ];
-            // Shuffle to get a random order
-            shuffle($extraImages);
 
-            // Select 3 random extra images + 1 primary image
-            $imagesToCopy = [
-                $primaryImage,
-                $extraImages[0],
-                $extraImages[1],
-                $extraImages[2]
-            ];
+            $typeKey = $unitType ? $unitType->name_en : 'Residential Land';
+            $imagesPool = $onlineLandImages[$typeKey] ?? $onlineLandImages['Residential Land'];
 
-            foreach ($imagesToCopy as $mediaIndex => $srcImageName) {
-                $sourcePath = base_path('land types/' . $srcImageName);
-                $destName = "unit-{$unit->id}-" . ($mediaIndex + 1) . ".png";
-                $destPath = 'units/' . $destName;
-
-                if (\Illuminate\Support\Facades\File::exists($sourcePath)) {
-                    \Illuminate\Support\Facades\File::copy($sourcePath, \Illuminate\Support\Facades\Storage::disk('public')->path($destPath));
-                }
-
+            foreach ($imagesPool as $mediaIndex => $imageUrl) {
                 \App\Models\UnitMedia::create([
                     'unit_id' => $unit->id,
                     'type' => 'image',
-                    'url' => $destPath,
+                    'url' => $imageUrl,
                     'order' => $mediaIndex + 1,
                     'processing_status' => 'completed'
                 ]);
             }
 
-            // Floorplan
-            $floorplanSource = base_path('land types/floorplan.png');
-            $floorplanName = "unit-{$unit->id}-floorplan.png";
-            $floorplanPath = 'units/' . $floorplanName;
-            if (\Illuminate\Support\Facades\File::exists($floorplanSource)) {
-                \Illuminate\Support\Facades\File::copy($floorplanSource, \Illuminate\Support\Facades\Storage::disk('public')->path($floorplanPath));
-            }
-            
+            // Floorplan layout blueprint online URL
             \App\Models\UnitMedia::create([
                 'unit_id' => $unit->id,
                 'type' => 'floorplan',
-                'url' => $floorplanPath,
+                'url' => 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop',
                 'order' => 5,
                 'processing_status' => 'completed'
             ]);
 
-            // Video (distribution between land_video_1 and land_video_2)
-            $videoFile = ($unit->id % 2 === 0) ? 'land_video_1.mp4' : 'land_video_2.mp4';
-            $videoSource = base_path('land types/' . $videoFile);
-            $unitVideoName = "unit-{$unit->id}-video.mp4";
-            $videoPath = 'units/' . $unitVideoName;
-            if (\Illuminate\Support\Facades\File::exists($videoSource)) {
-                \Illuminate\Support\Facades\File::copy($videoSource, \Illuminate\Support\Facades\Storage::disk('public')->path($videoPath));
-            }
+            // Video online MP4 URL
+            $videoUrl = ($unit->id % 2 === 0)
+                ? 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
+                : 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4';
 
             \App\Models\UnitMedia::create([
                 'unit_id' => $unit->id,
                 'type' => 'video',
-                'url' => $videoPath,
+                'url' => $videoUrl,
                 'order' => 6,
                 'processing_status' => 'completed',
             ]);

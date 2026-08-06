@@ -193,34 +193,34 @@ class ContentSeeder extends Seeder
             Page::updateOrCreate(['slug' => $page['slug']], $page);
         }
 
-        // Seed Banners
+        // Seed Banners with high-res online land images
         $banners = [
             [
-                'image' => 'banners/banner1.jpg',
+                'image' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop',
                 'url' => '/units',
                 'is_active' => true,
                 'sort_order' => 1,
             ],
             [
-                'image' => 'banners/banner2.jpg',
+                'image' => 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1600&auto=format&fit=crop',
                 'url' => '/about',
                 'is_active' => true,
                 'sort_order' => 2,
             ],
             [
-                'image' => 'banners/banner3.jpg',
+                'image' => 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?q=80&w=1600&auto=format&fit=crop',
                 'url' => '/services',
                 'is_active' => true,
                 'sort_order' => 3,
             ],
             [
-                'image' => 'banners/banner4.jpg',
+                'image' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop',
                 'url' => '/contact',
                 'is_active' => true,
                 'sort_order' => 4,
             ],
             [
-                'image' => 'banners/banner5.jpg',
+                'image' => 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1600&auto=format&fit=crop',
                 'url' => '/faq',
                 'is_active' => true,
                 'sort_order' => 5,
@@ -228,11 +228,6 @@ class ContentSeeder extends Seeder
         ];
 
         foreach ($banners as $banner) {
-            $source = base_path('images/' . basename($banner['image']));
-            if (File::exists($source)) {
-                Storage::disk('public')->makeDirectory('banners');
-                File::copy($source, Storage::disk('public')->path($banner['image']));
-            }
             Banner::updateOrCreate(['url' => $banner['url']], $banner);
         }
 
@@ -258,19 +253,19 @@ class ContentSeeder extends Seeder
 
         // Seed Settings
         $settings = [
-            'site_name' => 'Propix 8',
+            'site_name' => 'عقار موسى للأراضي',
             'site_email' => 'admin@admin.com',
             'site_phone' => '01010613746',
-            'site_address' => 'mansoura',
+            'site_address' => 'المنصورة، مصر',
             'social_facebook' => 'https://facebook.com',
             'social_instagram' => 'https://instagram.com',
             'social_twitter' => 'https://twitter.com',
-            'site_logo' => 'settings/logo.png',
+            'site_logo' => 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=400&auto=format&fit=crop',
             'home_hero_image' => json_encode([
-                "settings/hero1.jpg",
-                "settings/hero2.jpg",
-                "settings/hero3.jpeg",
-                "settings/hero4.jpeg"
+                "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop",
+                "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1600&auto=format&fit=crop",
+                "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?q=80&w=1600&auto=format&fit=crop",
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop"
             ]),
         ];
 

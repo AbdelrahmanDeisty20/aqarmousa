@@ -119,22 +119,16 @@ class DemoContentSeeder extends Seeder
 
         // 3. Create Land Developers / Master Planners
         $developersData = [
-            ['name_en' => 'Emaar Land Developments', 'name_ar' => 'إعمار لتطوير الأراضي'],
-            ['name_en' => 'SODIC Master Plans', 'name_ar' => 'سوديك للمخططات العقارية'],
-            ['name_en' => 'Palm Hills Lands', 'name_ar' => 'بالم هيلز للأراضي'],
-            ['name_en' => 'Mountain View Subdivisions', 'name_ar' => 'ماونتن فيو لتقسيم الأراضي'],
-            ['name_en' => 'Talaat Moustafa Land Group', 'name_ar' => 'مجموعة طلعت مصطفى للأراضي'],
-            ['name_en' => 'Misr Italia Land Ventures', 'name_ar' => 'مصر إيطاليا للاستثمار العقاري والأراضي'],
+            ['name_en' => 'Emaar Land Developments', 'name_ar' => 'إعمار لتطوير الأراضي', 'logo' => 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=400&auto=format&fit=crop'],
+            ['name_en' => 'SODIC Master Plans', 'name_ar' => 'سوديك للمخططات العقارية', 'logo' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=400&auto=format&fit=crop'],
+            ['name_en' => 'Palm Hills Lands', 'name_ar' => 'بالم هيلز للأراضي', 'logo' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=400&auto=format&fit=crop'],
+            ['name_en' => 'Mountain View Subdivisions', 'name_ar' => 'ماونتن فيو لتقسيم الأراضي', 'logo' => 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=400&auto=format&fit=crop'],
+            ['name_en' => 'Talaat Moustafa Land Group', 'name_ar' => 'مجموعة طلعت مصطفى للأراضي', 'logo' => 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?q=80&w=400&auto=format&fit=crop'],
+            ['name_en' => 'Misr Italia Land Ventures', 'name_ar' => 'مصر إيطاليا للاستثمار العقاري والأراضي', 'logo' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=400&auto=format&fit=crop'],
         ];
 
         $developers = [];
-        Storage::disk('public')->makeDirectory('developers');
         foreach ($developersData as $devData) {
-            $logoSource = base_path('images/developers.jpg');
-            if (File::exists($logoSource)) {
-                File::copy($logoSource, Storage::disk('public')->path('developers/developers.jpg'));
-            }
-
             $developers[] = Developer::firstOrCreate(
                 ['name_en' => $devData['name_en']],
                 [
@@ -143,7 +137,7 @@ class DemoContentSeeder extends Seeder
                     'phone' => $fakerAr->phoneNumber,
                     'address' => $fakerEn->address,
                     'status' => 'active',
-                    'logo' => 'developers/developers.jpg'
+                    'logo' => $devData['logo']
                 ]
             );
         }
@@ -190,13 +184,56 @@ class DemoContentSeeder extends Seeder
             }
         }
 
+        // Online HD Land Images pool
+        $onlineLandImages = [
+            'Residential Land' => [
+                'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1511497584788-8767611136f6?q=80&w=1200&auto=format&fit=crop'
+            ],
+            'Commercial Land' => [
+                'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop'
+            ],
+            'Agricultural Land' => [
+                'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1200&auto=format&fit=crop'
+            ],
+            'Industrial Land' => [
+                'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop'
+            ],
+            'Coastal Land' => [
+                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop'
+            ],
+            'Investment Land' => [
+                'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1511497584788-8767611136f6?q=80&w=1200&auto=format&fit=crop'
+            ],
+            'Service Land' => [
+                'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1200&auto=format&fit=crop'
+            ]
+        ];
+
         // 5. Create LAND Units
         $offerTypes = ['sale', 'rent'];
         $statuses = ['available', 'available', 'available', 'available', 'sold', 'reserved'];
         $developmentStatuses = ['مكتمل المرافق', 'جاهز للبناء', 'جاهز للزراعة', 'تحت التطوير', 'مرافق جزئية'];
-
-        Storage::disk('public')->makeDirectory('units');
-        $floorplanSource = base_path('land types/floorplan.png');
 
         $governorates = Governorate::all();
 
@@ -272,83 +309,37 @@ class DemoContentSeeder extends Seeder
                     $unit->amenities()->attach($randomAmenities);
                 }
 
-                // Attach Media (Photos, Floorplan, Video)
-                $primaryImage = 'residential_land.png';
-                if ($type->name_en === 'Commercial Land') {
-                    $primaryImage = 'commercial_land.png';
-                } elseif ($type->name_en === 'Agricultural Land') {
-                    $primaryImage = 'agricultural_land.png';
-                } elseif ($type->name_en === 'Industrial Land') {
-                    $primaryImage = 'industrial_land.png';
-                } elseif ($type->name_en === 'Coastal Land') {
-                    $primaryImage = 'land_extra_1.png';
-                } elseif ($type->name_en === 'Investment Land') {
-                    $primaryImage = 'land_extra_2.png';
-                } elseif ($type->name_en === 'Service Land') {
-                    $primaryImage = 'land_extra_3.png';
-                }
+                // Attach High-Res Online HTTP Images
+                $imagesPool = $onlineLandImages[$type->name_en] ?? $onlineLandImages['Residential Land'];
 
-                $extraImages = [
-                    'land_extra_1.png',
-                    'land_extra_2.png',
-                    'land_extra_3.png',
-                    'land_extra_4.png'
-                ];
-                shuffle($extraImages);
-
-                $imagesToCopy = [
-                    $primaryImage,
-                    $extraImages[0],
-                    $extraImages[1],
-                    $extraImages[2]
-                ];
-
-                foreach ($imagesToCopy as $mediaIndex => $srcImageName) {
-                    $sourcePath = base_path('land types/' . $srcImageName);
-                    $destName = "unit-{$unit->id}-" . ($mediaIndex + 1) . ".png";
-                    $destPath = 'units/' . $destName;
-
-                    if (File::exists($sourcePath)) {
-                        File::copy($sourcePath, Storage::disk('public')->path($destPath));
-                    }
-
+                foreach ($imagesPool as $mediaIndex => $imageUrl) {
                     UnitMedia::create([
                         'unit_id' => $unit->id,
                         'type' => 'image',
-                        'url' => $destPath,
+                        'url' => $imageUrl,
                         'order' => $mediaIndex + 1,
                         'processing_status' => 'completed'
                     ]);
                 }
 
-                // Add Floorplan / Plot layout blueprint
-                $floorplanName = "unit-{$unit->id}-floorplan.png";
-                $floorplanPath = 'units/' . $floorplanName;
-                if (File::exists($floorplanSource)) {
-                    File::copy($floorplanSource, Storage::disk('public')->path($floorplanPath));
-                }
-
+                // Add Floorplan / Plot layout blueprint online image URL
                 UnitMedia::create([
                     'unit_id' => $unit->id,
                     'type' => 'floorplan',
-                    'url' => $floorplanPath,
+                    'url' => 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop',
                     'order' => 5,
                     'processing_status' => 'completed'
                 ]);
 
-                // Add Video
-                $videoFile = ($unit->id % 2 === 0) ? 'land_video_1.mp4' : 'land_video_2.mp4';
-                $videoSource = base_path('land types/' . $videoFile);
-                $unitVideoName = "unit-{$unit->id}-video.mp4";
-                $videoPath = 'units/' . $unitVideoName;
-                if (File::exists($videoSource)) {
-                    File::copy($videoSource, Storage::disk('public')->path($videoPath));
-                }
+                // Add Video URL
+                $videoUrl = ($unit->id % 2 === 0)
+                    ? 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
+                    : 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4';
 
                 UnitMedia::create([
                     'unit_id' => $unit->id,
                     'type' => 'video',
-                    'url' => $videoPath,
+                    'url' => $videoUrl,
                     'order' => 6,
                     'processing_status' => 'completed'
                 ]);

@@ -43,7 +43,7 @@ class SiteSettings extends Page implements HasForms
         $heroImage = Setting::where('key', 'home_hero_image')->first()?->value;
         // Decode if it's a JSON string (multiple images)
         $decodedHeroImage = json_decode($heroImage, true);
-        $heroImageValue = is_array($decodedHeroImage) ? $decodedHeroImage : $heroImage;
+        $heroImageValue = is_array($decodedHeroImage) ? $decodedHeroImage : ($heroImage ? [$heroImage] : []);
 
         $this->data = [
             'home_hero_image' => $heroImageValue,
@@ -87,9 +87,9 @@ class SiteSettings extends Page implements HasForms
                             ->schema([
                                 FileUpload::make('site_logo')
                                     ->label(__('admin.site_logo'))
-                                    ->helperText('يرجى استخدام صيغ الصور المدعومة: JPG, PNG,JPEG')
+                                    ->helperText('يرجى استخدام صيغ الصور المدعومة: JPG, PNG, JPEG, WEBP')
                                     ->image()
-                                    ->acceptedFileTypes(['image/jpeg', 'image/png','image/jpg'])
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                                     ->directory('settings')
                                     ->disk('public')
                                     ->visibility('public')
@@ -98,11 +98,11 @@ class SiteSettings extends Page implements HasForms
 
                                 FileUpload::make('home_hero_image')
                                     ->label(__('admin.home_hero_image'))
-                                    ->helperText('يرجى استخدام صيغ الصور المدعومة: JPG, PNG,JPEG')
+                                    ->helperText('يرجى استخدام صيغ الصور المدعومة: JPG, PNG, JPEG, WEBP')
                                     ->image()
                                     ->multiple()
                                     ->reorderable()
-                                    ->acceptedFileTypes(['image/jpeg', 'image/png','image/jpg'])
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                                     ->directory('settings')
                                     ->disk('public')
                                     ->visibility('public')

@@ -51,8 +51,15 @@ class Setting extends Model
             $decoded = json_decode($setting->value, true);
             if (is_array($decoded)) {
                 return array_map(function ($path) {
+                    if (filter_var($path, FILTER_VALIDATE_URL) || str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+                        return $path;
+                    }
                     return Storage::disk('public')->url($path);
                 }, $decoded);
+            }
+
+            if (filter_var($setting->value, FILTER_VALIDATE_URL) || str_starts_with($setting->value, 'http://') || str_starts_with($setting->value, 'https://')) {
+                return $setting->value;
             }
 
             return Storage::disk('public')->url($setting->value);
